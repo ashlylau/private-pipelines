@@ -91,10 +91,28 @@ def train(model, criterion, optimizer, epochs, X_train, y_train):
 
     return losses
 
-def save_model(model):
-    """TODO"""
-    pass
+def test(model, X_test, y_test):
+    preds = []
+    with torch.no_grad():
+        for val in X_test:
+            y_hat = model.forward(val)
+            preds.append(y_hat.argmax().item())
 
+    df = pd.DataFrame({'Y': y_test, 'YHat': preds})
+    df['Correct'] = [1 if corr == pred else 0 for corr, pred in zip(df['Y'], df['YHat'])]
+    accuracy = df['Correct'].sum() / len(df)
+    return accuracy, preds
+
+def save_model(model, i):
+    torch.save(model.state_dict(), "models/model-" + str(i) + ".pt")
+
+def load_model(i):
+    new_model = Model()
+    new_model.load_state_dict(torch.load("models/model-" + str(i) + ".pt"))
+    # Call model.eval() to set dropout and batch normalization layers to evaluation mode before running inference. 
+    # Failing to do this will yield inconsistent inference results.
+    new_model.eval()
+    return new_model
 
 def main():
     # Get data
@@ -109,14 +127,23 @@ def main():
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
     epochs = 100
 
-    losses = train(model, criterion, optimizer, epochs, X_train, y_train)
+    _ = train(model, criterion, optimizer, epochs, X_train, y_train)
 
-    # Plot loss
-    print("plotting losses")
-    plt.plot(range(epochs), losses)
-    plt.ylabel('Loss')
-    plt.xlabel('epoch')
-    plt.savefig("training_loss.png")
+    save_model(model, 0)
+    new_model = load_model(0)
+
+    accuracy_1, preds_1 = test(model, X_test, y_test)
+    accuracy_2, preds_2 = test(new_model, X_test, y_test)
+
+    print("Orig model accuracy: {}\nPredictions: {}".format(accuracy_1, preds_1))
+    print("Loaded model accuracy: {}\nPredictions: {}".format(accuracy_2, preds_2))
+
+    # # Plot loss
+    # print("plotting losses")
+    # plt.plot(range(epochs), losses)
+    # plt.ylabel('Loss')
+    # plt.xlabel('epoch')
+    # plt.savefig("training_loss.png")
 
 if __name__ == "__main__":
     main()
