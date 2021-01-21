@@ -11,7 +11,7 @@ Target labels (species) are:
     Iris-versicolour
     Iris-virginica
 """
-
+import argparse
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -124,46 +124,79 @@ def load_model(i):
     new_model.eval()
     return new_model
 
-def main():
-    # Get data
-    dataset = import_data()
-    X_train, X_test, y_train, y_test = split_data(dataset)
-
-    # Define hyperpaarmeters
-    criterion = nn.CrossEntropyLoss()
-    epochs = 20
-
-    # Private model
+def train_and_save_private_model(i, X_train, y_train, criterion, epochs):
     priv_model = Model()
     priv_optimizer = torch.optim.Adam(priv_model.parameters(), lr=0.01)
     privacy_engine = PrivacyEngine(
         priv_model,
-        batch_size=119,
+        batch_size=len(X_train),
         sample_size=len(X_train),
         alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
         noise_multiplier=1.3,
         max_grad_norm=1.0
     )
     privacy_engine.attach(priv_optimizer)
-    _ = train(priv_model, criterion, priv_optimizer, epochs, X_train, y_train, True)
+    losses = train(priv_model, criterion, priv_optimizer, epochs, X_train, y_train, True)
+    
+    # Plot loss
+    plt.plot(range(epochs), losses)
+    plt.ylabel('Loss')
+    plt.xlabel('epoch')
+    plt.title("training_loss-" + str(i))
+    plt.savefig("training_loss/training_loss-" + str(i) + ".png")
+    plt.clf()
 
-    # Non-private model
-    model = Model()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-    _ = train(model, criterion, optimizer, epochs, X_train, y_train, False)
+    # Save model
+    save_model(priv_model, i)
 
-    accuracy_1, preds_1 = test(priv_model, X_test, y_test)
-    accuracy_2, preds_2 = test(model, X_test, y_test)
 
-    print("Private model accuracy: {}\nPredictions: {}".format(accuracy_1, preds_1))
-    print("Original model accuracy: {}\nPredictions: {}".format(accuracy_2, preds_2))
+def main():
+    parser = argparse.ArgumentParser(description='Iris Prediction')
+    parser.add_argument('--train_all', type=bool, default=False,
+                        help='whether or not to train all candidate models')
+    args = parser.parse_args()
 
-    # # Plot loss
-    # print("plotting losses")
-    # plt.plot(range(epochs), losses)
-    # plt.ylabel('Loss')
-    # plt.xlabel('epoch')
-    # plt.savefig("training_loss.png")
+    # Get data
+    dataset = import_data()
+    X_train, X_test, y_train, y_test = split_data(dataset)
+
+    # Define hyperparameters
+    criterion = nn.CrossEntropyLoss()
+    epochs = 50
+
+    # Train main private model
+    train_and_save_private_model(-1, X_train, y_train, criterion, epochs)
+
+    # Train non-private model
+    non_private_model = Model()
+    optimizer = torch.optim.Adam(non_private_model.parameters(), lr=0.01)
+    _ = train(non_private_model, criterion, optimizer, epochs, X_train, y_train, False)
+
+    if args.train_all:
+        # Train leave-one-out private models
+        for i in range(len(X_train)):
+            # Delete sample and label at index i
+            index = torch.tensor(list(range(i)) + list(range(i+1, len(X_train))))
+            new_X_train = torch.index_select(X_train, 0, index)
+            new_y_train = torch.index_select(y_train, 0, index)
+            # Train and save
+            train_and_save_private_model(i, new_X_train, new_y_train, criterion, epochs)
+
+        # Evaluate leave-one-out private models
+        for i in range(len(X_train)):
+            model = load_model(i)
+            accuracy, _ = test(model, X_test, y_test)
+            print("Model {} accuracy: {}".format(i, accuracy))
+        
+
+    # Evaluate models
+    accuracy, _ = test(load_model(-1), X_test, y_test)
+    print("Full private model accuracy: {}".format(accuracy))
+
+    accuracy, _ = test(non_private_model, X_test, y_test)
+    print("Original model accuracy: {}".format(accuracy))
+   
 
 if __name__ == "__main__":
     main()
+    
