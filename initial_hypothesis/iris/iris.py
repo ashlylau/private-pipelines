@@ -1,6 +1,6 @@
 """
 We will perform a multi-class classification problem based on the Iris data set.
-This comprises of 50 samples with four features:
+This comprises of 150 samples with four features:
     sepal length (cm)
     sepal width (cm)
     petal length (cm)
@@ -15,6 +15,8 @@ Target labels (species) are:
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
+from opacus import PrivacyEngine
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 
@@ -26,7 +28,7 @@ import matplotlib.pyplot as plt
 Model architecture:
 Fully Connected Layer 4 input features, 25 output features (arbitrary)
 Fully Connected Layer 25 input features, 30 output features (arbitrary)
-Output Layer 30 input features , 3 output features
+Output Layer 30 input features, 3 output features
 """
 
 class Model(nn.Module):
@@ -67,7 +69,7 @@ def split_data(dataset):
     X = dataset.drop("species",axis=1).values
     y = dataset["species"].values
 
-    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.20)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 
     X_train = torch.FloatTensor(X_train)
     X_test = torch.FloatTensor(X_test)
@@ -76,18 +78,26 @@ def split_data(dataset):
 
     return X_train, X_test, y_train, y_test
 
-def train(model, criterion, optimizer, epochs, X_train, y_train):
+def train(model, criterion, optimizer, epochs, X_train, y_train, train_private=True):
     losses = []
 
-    for i in range(epochs):
+    for _ in range(epochs):
         y_pred = model.forward(X_train)
         loss = criterion(y_pred, y_train)
         losses.append(loss)
-        print(f'epoch: {i:2}  loss: {loss.item():10.8f}')
+        # print(f'epoch: {i:2}  loss: {loss.item():10.8f}')
         
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+
+    if train_private:
+        delta = 0.01
+        epsilon, best_alpha = optimizer.privacy_engine.get_privacy_spent(delta)
+        print(
+            f"Train Epoch: {epochs} \t"
+            f"(ε = {epsilon:.2f}, δ = {delta}) for α = {best_alpha}"
+        )
 
     return losses
 
@@ -116,27 +126,37 @@ def load_model(i):
 
 def main():
     # Get data
-    print("getting data")
     dataset = import_data()
     X_train, X_test, y_train, y_test = split_data(dataset)
 
-    # Create model and define hyperparameters
-    print("creating model")
-    model = Model()
+    # Define hyperpaarmeters
     criterion = nn.CrossEntropyLoss()
+    epochs = 20
+
+    # Private model
+    priv_model = Model()
+    priv_optimizer = torch.optim.Adam(priv_model.parameters(), lr=0.01)
+    privacy_engine = PrivacyEngine(
+        priv_model,
+        batch_size=119,
+        sample_size=len(X_train),
+        alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
+        noise_multiplier=1.3,
+        max_grad_norm=1.0
+    )
+    privacy_engine.attach(priv_optimizer)
+    _ = train(priv_model, criterion, priv_optimizer, epochs, X_train, y_train, True)
+
+    # Non-private model
+    model = Model()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-    epochs = 100
+    _ = train(model, criterion, optimizer, epochs, X_train, y_train, False)
 
-    _ = train(model, criterion, optimizer, epochs, X_train, y_train)
+    accuracy_1, preds_1 = test(priv_model, X_test, y_test)
+    accuracy_2, preds_2 = test(model, X_test, y_test)
 
-    save_model(model, 0)
-    new_model = load_model(0)
-
-    accuracy_1, preds_1 = test(model, X_test, y_test)
-    accuracy_2, preds_2 = test(new_model, X_test, y_test)
-
-    print("Orig model accuracy: {}\nPredictions: {}".format(accuracy_1, preds_1))
-    print("Loaded model accuracy: {}\nPredictions: {}".format(accuracy_2, preds_2))
+    print("Private model accuracy: {}\nPredictions: {}".format(accuracy_1, preds_1))
+    print("Original model accuracy: {}\nPredictions: {}".format(accuracy_2, preds_2))
 
     # # Plot loss
     # print("plotting losses")
