@@ -46,6 +46,7 @@ class Model(nn.Module):
 
 def import_data():
     # Import data
+    # TODO: Remove pandas dependency
     dataset = pd.read_csv("iris.data")
 
     dataset.columns = ["sepal length (cm)", 
@@ -66,6 +67,7 @@ def import_data():
     return dataset
 
 def split_data(dataset):
+    # TODO: Remove sklearn dependency and use DataLoader, to experiment with using smaller batches.
     X = dataset.drop("species",axis=1).values
     y = dataset["species"].values
 
@@ -125,6 +127,8 @@ def load_model(i):
     return new_model
 
 def train_and_save_private_model(i, X_train, y_train, criterion, epochs):
+    # TODO: Explore whether we need to select the best/average out of X number of runs,
+    #       because model results are inconsistent due to randomisation of DP optimizer.
     priv_model = Model()
     priv_optimizer = torch.optim.Adam(priv_model.parameters(), lr=0.01)
     privacy_engine = PrivacyEngine(
@@ -199,4 +203,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
