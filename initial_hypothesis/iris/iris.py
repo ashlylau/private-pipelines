@@ -1,37 +1,31 @@
 """
-We will perform a multi-class classification problem based on the Iris data set.
-This comprises of 150 samples with four features:
-    sepal length (cm)
-    sepal width (cm)
-    petal length (cm)
-    petal width (cm)
-
-Target labels (species) are:
-    Iris-setosa
-    Iris-versicolour
-    Iris-virginica
+We will perform a multi-class classification problem based on the Iris data set, 
+comprising of 4 features and 3 labels.
 """
 import argparse
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from opacus import PrivacyEngine
-from torch.utils.data import Dataset, DataLoader
+
+from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data.sampler import SubsetRandomSampler
 from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
+from keras.utils import to_categorical
+from opacus import PrivacyEngine
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-"""
-Model architecture:
-Fully Connected Layer 4 input features, 25 output features (arbitrary)
-Fully Connected Layer 25 input features, 30 output features (arbitrary)
-Output Layer 30 input features, 3 output features
-"""
-
 class Model(nn.Module):
+    """
+    Model architecture:
+    Fully Connected Layer 4 input features, 25 output features (arbitrary)
+    Fully Connected Layer 25 input features, 30 output features (arbitrary)
+    Output Layer 30 input features, 3 output features
+    """
     def __init__(self, input_features=4, hidden_layer1=25, hidden_layer2=30, output_features=3):
         super().__init__()
         self.fc1 = nn.Linear(input_features,hidden_layer1)                  
@@ -44,55 +38,21 @@ class Model(nn.Module):
         x = self.out(x)
         return x
 
-def import_data():
-    # Import data
-    # TODO: Remove pandas dependency
-    dataset = pd.read_csv("iris.data")
 
-    dataset.columns = ["sepal length (cm)", 
-                    "sepal width (cm)", 
-                    "petal length (cm)", 
-                    "petal width (cm)", 
-                    "species"]
-
-    # Transform species data to numeric values
-    mappings = {
-        "Iris-setosa": 0,
-        "Iris-versicolor": 1,
-        "Iris-virginica": 2
-    }
-
-    dataset["species"] = dataset["species"].apply(lambda x: mappings[x])
-
-    return dataset
-
-def split_data(dataset):
-    # TODO: Remove sklearn dependency and use DataLoader, to experiment with using smaller batches.
-    X = dataset.drop("species",axis=1).values
-    y = dataset["species"].values
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
-
-    X_train = torch.FloatTensor(X_train)
-    X_test = torch.FloatTensor(X_test)
-    y_train = torch.LongTensor(y_train)
-    y_test = torch.LongTensor(y_test)
-
-    return X_train, X_test, y_train, y_test
-
-def train(model, criterion, optimizer, epochs, X_train, y_train, train_private=True):
+def train(model, criterion, optimizer, epochs, train_loader, train_private=True):
     losses = []
-
     for _ in range(epochs):
-        y_pred = model.forward(X_train)
-        loss = criterion(y_pred, y_train)
-        losses.append(loss)
-        # print(f'epoch: {i:2}  loss: {loss.item():10.8f}')
-        
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        for _, (x, y) in enumerate(train_loader):
+            y_pred = model.forward(x)
+            loss = criterion(y_pred, torch.max(y, 1)[1])
+            losses.append(loss)
+            # print(f'epoch: {i:2}  loss: {loss.item():10.8f}')
+            
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
+    # Print privacy budget spent.
     if train_private:
         delta = 0.01
         epsilon, best_alpha = optimizer.privacy_engine.get_privacy_spent(delta)
@@ -103,17 +63,21 @@ def train(model, criterion, optimizer, epochs, X_train, y_train, train_private=T
 
     return losses
 
-def test(model, X_test, y_test):
+def test(model, test_loader):
+    num_correct = 0
     preds = []
     with torch.no_grad():
-        for val in X_test:
-            y_hat = model.forward(val)
-            preds.append(y_hat.argmax().item())
+        for _, (x, y) in enumerate(test_loader):
+            y_hat = model.forward(x)
+            y_hat = y_hat.argmax(dim=1)
+            y = y.argmax(dim=1)
 
-    df = pd.DataFrame({'Y': y_test, 'YHat': preds})
-    df['Correct'] = [1 if corr == pred else 0 for corr, pred in zip(df['Y'], df['YHat'])]
-    accuracy = df['Correct'].sum() / len(df)
-    return accuracy, preds
+            preds.extend(y_hat)
+            num_correct += (y_hat == y).sum()
+
+    acc = float(num_correct) / len(preds)
+    print('Got %d / %d correct (%.2f)' % (num_correct, len(preds), 100 * acc))
+    return acc
 
 def save_model(model, i):
     torch.save(model.state_dict(), "models/model-" + str(i) + ".pt")
@@ -126,24 +90,24 @@ def load_model(i):
     new_model.eval()
     return new_model
 
-def train_and_save_private_model(i, X_train, y_train, criterion, epochs):
+def train_and_save_private_model(i, train_loader, criterion, epochs, batch_size):
     # TODO: Explore whether we need to select the best/average out of X number of runs,
     #       because model results are inconsistent due to randomisation of DP optimizer.
     priv_model = Model()
     priv_optimizer = torch.optim.Adam(priv_model.parameters(), lr=0.01)
     privacy_engine = PrivacyEngine(
         priv_model,
-        batch_size=len(X_train),
-        sample_size=len(X_train),
+        batch_size=batch_size,
+        sample_size=len(train_loader.dataset),
         alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
         noise_multiplier=1.3,
         max_grad_norm=1.0
     )
     privacy_engine.attach(priv_optimizer)
-    losses = train(priv_model, criterion, priv_optimizer, epochs, X_train, y_train, True)
+    losses = train(priv_model, criterion, priv_optimizer, epochs, train_loader, True)
     
     # Plot loss
-    plt.plot(range(epochs), losses)
+    plt.plot(range(len(losses)), losses)
     plt.ylabel('Loss')
     plt.xlabel('epoch')
     plt.title("training_loss-" + str(i))
@@ -156,50 +120,64 @@ def train_and_save_private_model(i, X_train, y_train, criterion, epochs):
 
 def main():
     parser = argparse.ArgumentParser(description='Iris Prediction')
-    parser.add_argument('--train_all', type=bool, default=False,
+    parser.add_argument('--train_all', action='store_true',
                         help='whether or not to train all candidate models')
+    parser.add_argument('--epochs', type=int, default=30, help='number of epochs')
+    parser.add_argument('--batch_size', type=int, default=16, help='batch size')
     args = parser.parse_args()
-
-    # Get data
-    dataset = import_data()
-    X_train, X_test, y_train, y_test = split_data(dataset)
 
     # Define hyperparameters
     criterion = nn.CrossEntropyLoss()
-    epochs = 50
+    epochs = args.epochs
+    batch_size = args.batch_size
+
+    # Get data
+    iris = load_iris()
+    x_data = iris.data
+    y_data = iris.target
+    y_data = to_categorical(y_data)
+
+    x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.2, random_state=42)
+
+    train_loader = torch.utils.data.DataLoader(
+        TensorDataset(torch.Tensor(x_train), torch.Tensor(y_train)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
+    test_loader = torch.utils.data.DataLoader(
+        TensorDataset(torch.Tensor(x_test), torch.Tensor(y_test)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
 
     # Train main private model
-    train_and_save_private_model(-1, X_train, y_train, criterion, epochs)
+    train_and_save_private_model(-1, train_loader, criterion, epochs, batch_size)
 
     # Train non-private model
     non_private_model = Model()
     optimizer = torch.optim.Adam(non_private_model.parameters(), lr=0.01)
-    _ = train(non_private_model, criterion, optimizer, epochs, X_train, y_train, False)
-
-    if args.train_all:
-        # Train leave-one-out private models
-        for i in range(len(X_train)):
-            # Delete sample and label at index i
-            index = torch.tensor(list(range(i)) + list(range(i+1, len(X_train))))
-            new_X_train = torch.index_select(X_train, 0, index)
-            new_y_train = torch.index_select(y_train, 0, index)
-            # Train and save
-            train_and_save_private_model(i, new_X_train, new_y_train, criterion, epochs)
-
-        # Evaluate leave-one-out private models
-        for i in range(len(X_train)):
-            model = load_model(i)
-            accuracy, _ = test(model, X_test, y_test)
-            print("Model {} accuracy: {}".format(i, accuracy))
-        
+    _ = train(non_private_model, criterion, optimizer, epochs, train_loader, False)
 
     # Evaluate models
-    accuracy, _ = test(load_model(-1), X_test, y_test)
+    accuracy = test(load_model(-1), test_loader)
     print("Full private model accuracy: {}".format(accuracy))
 
-    accuracy, _ = test(non_private_model, X_test, y_test)
+    accuracy = test(non_private_model, test_loader)
     print("Original model accuracy: {}".format(accuracy))
-   
+
+    # Train leave-one-out private models
+    if args.train_all:
+        print("here")
+        len_dataset = len(train_loader.dataset)
+        for i in range(len_dataset):
+            # Remove sample and label at index i
+            new_x_train = np.append(x_train[:i], (x_train[i+1:]), axis=0)
+            new_y_train = np.append(y_train[:i], (y_train[i+1:]), axis=0)
+            new_train_loader = torch.utils.data.DataLoader(
+                TensorDataset(torch.Tensor(new_x_train), torch.Tensor(new_y_train)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
+            # Train and save
+            train_and_save_private_model(i, new_train_loader, criterion, epochs, batch_size)
+
+        # Evaluate leave-one-out private models
+        for i in range(len_dataset):
+            model = load_model(i)
+            accuracy = test(model, test_loader)
+            print("Model {} accuracy: {}".format(i, accuracy))
+        
 
 if __name__ == "__main__":
     main()
