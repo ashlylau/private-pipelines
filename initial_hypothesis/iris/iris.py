@@ -2,6 +2,7 @@
 We will perform a multi-class classification problem based on the Iris data set, 
 comprising of 4 features and 3 labels.
 """
+import os
 import argparse
 import torch
 import torch.nn as nn
@@ -18,6 +19,10 @@ from opacus import PrivacyEngine
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from data import outlier_indices
+
+model_path = "models/model-"
 
 class Model(nn.Module):
     """
@@ -79,18 +84,24 @@ def test(model, test_loader):
     print('Got %d / %d correct (%.2f)' % (num_correct, len(preds), 100 * acc))
     return acc
 
-def save_model(model, i):
-    torch.save(model.state_dict(), "models/model-" + str(i) + ".pt")
+# i : index of data left out; j : trained iteration
+def save_model(model, i, j):
+    # Create folder if it doesn't exist yet.
+    try:
+        os.makedirs(model_path + str(i))
+    except FileExistsError:
+        pass
+    torch.save(model.state_dict(), model_path + str(i) + "/" + str(j) + ".pt")
 
-def load_model(i):
+def load_model(i, j):
     new_model = Model()
-    new_model.load_state_dict(torch.load("models/model-" + str(i) + ".pt"))
+    new_model.load_state_dict(torch.load(model_path + str(i) + "/" + str(j) + ".pt"))
     # Call model.eval() to set dropout and batch normalization layers to evaluation mode before running inference. 
     # Failing to do this will yield inconsistent inference results.
     new_model.eval()
     return new_model
 
-def train_and_save_private_model(i, train_loader, criterion, epochs, batch_size):
+def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_size):
     # TODO: Explore whether we need to select the best/average out of X number of runs,
     #       because model results are inconsistent due to randomisation of DP optimizer.
     priv_model = Model()
@@ -115,7 +126,7 @@ def train_and_save_private_model(i, train_loader, criterion, epochs, batch_size)
     plt.clf()
 
     # Save model
-    save_model(priv_model, i)
+    save_model(priv_model, i, j)
 
 
 def main():
@@ -124,6 +135,7 @@ def main():
                         help='whether or not to train all candidate models')
     parser.add_argument('--epochs', type=int, default=30, help='number of epochs')
     parser.add_argument('--batch_size', type=int, default=16, help='batch size')
+    parser.add_argument('--num_models', type=int, default=3, help='number of models to train for each D')
     args = parser.parse_args()
 
     # Define hyperparameters
@@ -145,7 +157,8 @@ def main():
         TensorDataset(torch.Tensor(x_test), torch.Tensor(y_test)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
 
     # Train main private model
-    train_and_save_private_model(-1, train_loader, criterion, epochs, batch_size)
+    for j in range(args.num_models):
+        train_and_save_private_model(-1, j, train_loader, criterion, epochs, batch_size)
 
     # Train non-private model
     non_private_model = Model()
@@ -153,7 +166,7 @@ def main():
     _ = train(non_private_model, criterion, optimizer, epochs, train_loader, False)
 
     # Evaluate models
-    accuracy = test(load_model(-1), test_loader)
+    accuracy = test(load_model(-1, 0), test_loader)
     print("Full private model accuracy: {}".format(accuracy))
 
     accuracy = test(non_private_model, test_loader)
@@ -161,20 +174,20 @@ def main():
 
     # Train leave-one-out private models
     if args.train_all:
-        print("here")
-        len_dataset = len(train_loader.dataset)
-        for i in range(len_dataset):
+        for i in outlier_indices:
             # Remove sample and label at index i
             new_x_train = np.append(x_train[:i], (x_train[i+1:]), axis=0)
             new_y_train = np.append(y_train[:i], (y_train[i+1:]), axis=0)
             new_train_loader = torch.utils.data.DataLoader(
                 TensorDataset(torch.Tensor(new_x_train), torch.Tensor(new_y_train)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
             # Train and save
-            train_and_save_private_model(i, new_train_loader, criterion, epochs, batch_size)
+            # We train multiple versions of the model to introduce randomness
+            for j in range(args.num_models):
+                train_and_save_private_model(i, j, new_train_loader, criterion, epochs, batch_size)
 
         # Evaluate leave-one-out private models
-        for i in range(len_dataset):
-            model = load_model(i)
+        for i in outlier_indices:
+            model = load_model(i, 0)
             accuracy = test(model, test_loader)
             print("Model {} accuracy: {}".format(i, accuracy))
         
