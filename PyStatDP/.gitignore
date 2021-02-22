@@ -1,0 +1,58 @@
+# Compiled python files
+*.pyc
+
+# macOS generated files
+.DS_STORE
+
+# Temporary and log files
+*.tmp
+*.log
+
+# Coverage generated files
+.coverage
+coverage.xml
+
+# Ply generated files
+parser.out
+parsetab.py
+
+# IDE generated files
+.idea/
+.vscode/
+.vs/
+
+# Build files
+.cache/
+build/
+dist/
+*.egg-info/
+
+# Tox generated files
+.tox/
+
+# Python cache
+_pycache_/
+/pystatdp/__pycache__/
+/examples/__pycache__/
+# Z3 library release files
+z3/
+
+# Output figure
+*.pdf
+!/examples/generic_method.pdf
+
+# Result data file
+*.json
+!/examples/generic_method.json
+
+# Coverage reports
+.coverage.*
+
+# pytest cache
+.pytest_cache
+
+#some extra files not intended for now
+tox.ini
+Dockerfile
+.dockerignore
+.pre-commit-config.yaml

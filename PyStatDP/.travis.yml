@@ -1,0 +1,47 @@
+language: python
+python:
+  - "3.8"
+os: linux
+dist: bionic
+install:
+  - sudo apt-get update
+  - pip install -r requirements.txt
+  - pip install .
+  - pip install python-dp
+  # - pip install yapf
+  - pip install pytest
+  - pip install flaky
+  # - pip install bumpversion
+  - LD_LIBRARY_PATH=/usr/local/lib64/:$LD_LIBRARY_PATH
+  - export LD_LIBRARY_PATH
+# command to run tests
+script:
+  - pytest tests/test_main_init_.py
+  - pytest tests/test_utils.py
+  - pytest tests/test_selectors.py
+  - pytest tests/test_hypotest.py
+  - pytest tests/test_hypergeom.py
+# after_success:
+#   - yapf -vv -i $(find -name '*.py')
+# cache: pip
+# before_deploy:
+# - bumpversion --commit --current-version 0.1.1 --new-version 0.1.3 patch setup.py
+# - python setup.py sdist bdist_wheel
+deploy:
+  - provider: pypi
+    username: "__token__"
+    password:
+      secure: $PYPI_TOKEN
+    on:
+      repo: OpenMined/PyStatDP
+      branch: release
+    skip_cleanup: true
+  - provider: releases
+    api_key:
+      secure: $RELEASE_TOKEN
+    file_glob: true
+    file: dist/*
+    on:
+      repo: OpenMined/PyStatDP
+      branch: release
+    skip_cleanup: true
