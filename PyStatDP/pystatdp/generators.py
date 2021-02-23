@@ -19,9 +19,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import os
+import sys
 import enum
 import numpy as np
 from logging import getLogger
+
+sys.path.append(os.path.abspath('../initial_hypothesis/iris'))
+from data import outlier_indices
 
 logger = getLogger(__name__)
 
@@ -29,10 +34,12 @@ logger = getLogger(__name__)
 class Sensitivity(enum.Enum):
     ALL_DIFFER = 0
     ONE_DIFFER = 1
+    ML_DIFFER = 2
 
 
 ALL_DIFFER = Sensitivity.ALL_DIFFER
 ONE_DIFFER = Sensitivity.ONE_DIFFER
+ML_DIFFER = Sensitivity.ML_DIFFER
 
 
 def generate_arguments(algorithm, d1, d2, default_kwargs):
@@ -62,32 +69,36 @@ def generate_databases(algorithm, num_input, default_kwargs, sensitivity=ALL_DIF
     """
     if not isinstance(sensitivity, Sensitivity):
         raise ValueError(
-            'sensitivity must be pystatdp.ALL_DIFFER or pystatdp.ONE_DIFFER')
+            'sensitivity must be pystatdp.ALL_DIFFER or pystatdp.ONE_DIFFER or pystatdp.ML_DIFFER')
+    if sensitivity == ML_DIFFER:
+        d1 = -1  # This will be the model trained with the full dataset.
+        # Tuples will represent model number pairs to test.
+        candidates = [([d1], [d2]) for d2 in outlier_indices]  # Hard coded with length of data for now.
+    else:
+        # assume maximum distance is 1
+        d1 = np.ones(num_input, dtype=int)
+        candidates = [
+            (d1, np.concatenate((np.array([0]), d1[1:]), axis=0)),  # one below
+            (d1, np.concatenate((np.array([2]), d1[1:]), axis=0)),  # one above
+        ]
 
-    # assume maximum distance is 1
-    d1 = np.ones(num_input, dtype=int)
-    candidates = [
-        (d1, np.concatenate((np.array([0]), d1[1:]), axis=0)),  # one below
-        (d1, np.concatenate((np.array([2]), d1[1:]), axis=0)),  # one above
-    ]
-
-    if sensitivity == ALL_DIFFER:
-        dzero = np.zeros(num_input, dtype=int)
-        dtwo = np.full(num_input, 2, dtype=int)
-        candidates.extend([
-            # one above rest below
-            (d1, np.concatenate((np.array([2]), dzero[1:]), axis=0)),
-            # one below rest above
-            (d1, np.concatenate((np.array([0]), dtwo[1:]), axis=0)),
-            # half half
-            (d1, np.concatenate((dtwo[:int(num_input/2.0) + 1], dzero[:num_input - int(num_input / 2.0) + 1]), axis=0)),  # [0 for _ in range(num_input - int(num_input / 2))]),
-            # all above
-            (d1, dtwo),
-            # all below
-            (d1, dzero),
-            # x shape
-            (np.concatenate((d1[:int(np.floor(num_input / 2.0))+1], dzero[:int(np.ceil(num_input / 2.0))+1]), axis=0),
-             np.concatenate((dzero[:int(np.floor(num_input / 2.0))+1], d1[:int(np.ceil(num_input / 2.0))+1]), axis=0))
-        ])
+        if sensitivity == ALL_DIFFER:
+            dzero = np.zeros(num_input, dtype=int)
+            dtwo = np.full(num_input, 2, dtype=int)
+            candidates.extend([
+                # one above rest below
+                (d1, np.concatenate((np.array([2]), dzero[1:]), axis=0)),
+                # one below rest above
+                (d1, np.concatenate((np.array([0]), dtwo[1:]), axis=0)),
+                # half half
+                (d1, np.concatenate((dtwo[:int(num_input/2.0) + 1], dzero[:num_input - int(num_input / 2.0) + 1]), axis=0)),  # [0 for _ in range(num_input - int(num_input / 2))]),
+                # all above
+                (d1, dtwo),
+                # all below
+                (d1, dzero),
+                # x shape
+                (np.concatenate((d1[:int(np.floor(num_input / 2.0))+1], dzero[:int(np.ceil(num_input / 2.0))+1]), axis=0),
+                np.concatenate((dzero[:int(np.floor(num_input / 2.0))+1], d1[:int(np.ceil(num_input / 2.0))+1]), axis=0))
+            ])
 
     return tuple((d1, d2, generate_arguments(algorithm, d1, d2, default_kwargs)) for d1, d2 in candidates)

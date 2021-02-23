@@ -1,4 +1,3 @@
-asfs
 # MIT License
 #
 # Copyright (c) 2018 Yuxin Wang
@@ -32,7 +31,7 @@ import logging
 import multiprocessing as mp
 from tqdm import tqdm
 
-from pystatdp.generators import generate_arguments, generate_databases, ALL_DIFFER, ONE_DIFFER
+from pystatdp.generators import generate_arguments, generate_databases, ALL_DIFFER, ONE_DIFFER, ML_DIFFER
 from pystatdp.hypotest import hypothesis_test
 from pystatdp.selectors import select_event
 from pystatdp.algorithms import generic_method_pydp
@@ -139,8 +138,10 @@ class pystatdp:
                                                      process_pool=pool)
                 p = hypothesis_test(algorithm, d1, d2, kwargs, event, epsilon, detect_iterations, report_p2=False,
                                     process_pool=pool)
-                result.append((epsilon, float(p), d1.tolist(),
-                               d2.tolist(), kwargs, event))
+                if type(d1) != list:
+                    d1 = d1.tolist()
+                    d2 = d2.tolist()
+                result.append((epsilon, float(p), d1, d2, kwargs, event))
                 if not quiet:
                     tqdm.write(
                         f'Epsilon: {epsilon} | p-value: {p:5.3f} | Event: {event}')
@@ -148,11 +149,11 @@ class pystatdp:
 
             return result
 
-    def main(self, algo, param, privacy, e_iter=100000, d_iter=500000, test_range=0.1, n_checks=3):
+    def main(self, algo, param, privacy, e_iter=100000, d_iter=500000, test_range=0.1, n_checks=3, sensitivity=ALL_DIFFER):
         # list of tasks to test, each tuple contains (function, extra_args, sensitivity)
         tasks = [
             (generic_method_pydp, {'algorithm': algo,
-                                   'param_for_algorithm': param}, ALL_DIFFER)
+                                   'param_for_algorithm': param}, sensitivity)
         ]
 
         # claimed privacy level to check
