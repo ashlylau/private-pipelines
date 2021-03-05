@@ -51,9 +51,12 @@ def predict(model_number, x_test):
     # Randomly select model version to use to simulate algorithm randomness for the particular D'.
     num_models = len(os.listdir(absolute_model_path + str(model_number)))
     model_version = np.random.randint(num_models)
+    # model_version = 1
+    # print("Chosen model: {}".format(model_version))
     model = load_model(model_number, model_version)
     with torch.no_grad():
         y_pred = model.forward(x_test).argmax()
+        # print("D: {}, y_pred: {}".format(model_number, y_pred))
     return y_pred.item()
 
 def train(model, criterion, optimizer, epochs, train_loader, train_private=True):

@@ -23,6 +23,7 @@
 import os
 import sys
 import torch 
+import random
 from sklearn.datasets import load_iris
 
 sys.path.append(os.path.abspath('../PyStatDP/'))
@@ -31,19 +32,19 @@ from pystatdp.generators import ML_DIFFER
 
 sys.path.append(os.path.abspath('../initial_hypothesis/iris'))
 from iris import PredictIris
+from data import likely_misclassified_points, outlier_indices
 
 
-# TODO: Figure out module imports when importing from parent directory so I can put this into a folder.
-
-# Need to enclose in a main() to avoid freeze_support runtime error.
+# We need to enclose in a main() to avoid freeze_support runtime error.
 if __name__ == "__main__": 
     psd = pystatdp()
 
     # Load data
     iris = load_iris()
     x_data = iris.data
-    x_test = x_data[60]
-    print("x_test: {}".format(x_test))
+    rand_point = random.choice(outlier_indices)
+    x_test = x_data[rand_point]
+    print("x_test (element {}): {}".format(rand_point, x_test))
 
     # def main(self, algo, param, privacy, e_iter=100000, d_iter=500000, test_range=0.1, n_checks=3):
-    psd.main(PredictIris, torch.Tensor(x_test), tuple((6.5,)), e_iter=1000, d_iter=5000, test_range=0.2, n_checks=10, sensitivity=ML_DIFFER)
+    psd.main(PredictIris, torch.Tensor(x_test), tuple((2.0,)), e_iter=1000, d_iter=5000, test_range=0.5, n_checks=8, sensitivity=ML_DIFFER)

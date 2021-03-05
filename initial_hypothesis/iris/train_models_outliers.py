@@ -38,9 +38,10 @@ def main():
     x_data = iris.data
     y_data = iris.target
     y_data = to_categorical(y_data)
+    indices = np.arange(len(x_data))  # Get original indices
 
     # FIX THIS: We need to get the accurate index, not shuffled!!! 
-    x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.2, random_state=42)
+    x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(x_data, y_data, indices, test_size=0.2, random_state=42)
 
     train_loader = torch.utils.data.DataLoader(
         TensorDataset(torch.Tensor(x_train), torch.Tensor(y_train)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)

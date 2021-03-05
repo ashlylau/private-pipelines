@@ -35,7 +35,6 @@ def _evaluate_input(input_triplet, algorithm, iterations):
     d1, d2, kwargs = input_triplet
     return run_algorithm(algorithm, d1, d2, kwargs, None, iterations)
 
-
 def select_event(algorithm, input_list, epsilon, iterations, process_pool, quiet=False):
     """
     :param algorithm: The algorithm to run on.
