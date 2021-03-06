@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 model_path = "models/model-"
-absolute_model_path = "/Users/ashlylau/Desktop/year4/Indiv Project/private-pipelines/initial_hypothesis/iris/models/model-"
+absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/iris/models/model-"
 
 # Algorithm for hypothesis test
 class PredictIris():
@@ -45,18 +45,16 @@ class IrisModel(nn.Module):
         x = self.out(x)
         return x
 
-
+# Predict class for x_test using model-model_number
 def predict(model_number, x_test):
     model_number = model_number[0]
     # Randomly select model version to use to simulate algorithm randomness for the particular D'.
     num_models = len(os.listdir(absolute_model_path + str(model_number)))
     model_version = np.random.randint(num_models)
-    # model_version = 1
     # print("Chosen model: {}".format(model_version))
     model = load_model(model_number, model_version)
     with torch.no_grad():
         y_pred = model.forward(x_test).argmax()
-        # print("D: {}, y_pred: {}".format(model_number, y_pred))
     return y_pred.item()
 
 def train(model, criterion, optimizer, epochs, train_loader, train_private=True):
@@ -128,6 +126,7 @@ def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_si
         max_grad_norm=1.0
     )
     privacy_engine.attach(priv_optimizer)
+    print("Training model {}:".format(i))
     losses = train(priv_model, criterion, priv_optimizer, epochs, train_loader, True)
     
     # Plot loss

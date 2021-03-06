@@ -38,9 +38,12 @@ def main():
     x_data = iris.data
     y_data = iris.target
     y_data = to_categorical(y_data)
+    indices = np.arange(len(x_data))  # Get original indices
 
-    # FIX THIS: We need to get the accurate index, not shuffled!!! 
-    x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.2, random_state=42)
+    x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(x_data, y_data, indices, test_size=0.2, random_state=42)
+
+    # Check that indices line up
+    assert(np.all((x_train == np.take(x_data, idx_train, axis=0))))
 
     train_loader = torch.utils.data.DataLoader(
         TensorDataset(torch.Tensor(x_train), torch.Tensor(y_train)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
@@ -66,17 +69,21 @@ def main():
     # Train leave-one-out private models
     if args.train_all:
         for i in outlier_indices:
-            # Remove sample and label at index i
-            if i >= len(x_train):  # Exceeds length of x_train
+            if i in idx_test:  # We only remove from the train set.
                 continue
-            new_x_train = np.append(x_train[:i], (x_train[i+1:]), axis=0)
-            new_y_train = np.append(y_train[:i], (y_train[i+1:]), axis=0)
-            new_train_loader = torch.utils.data.DataLoader(
-                TensorDataset(torch.Tensor(new_x_train), torch.Tensor(new_y_train)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
+           
+            assert(i in idx_train)
+            # Remove sample and label at original index i
+            idx_train_prime = idx_train[idx_train != i]
+            x_train_prime = np.take(x_data, idx_train_prime, axis=0)
+            y_train_prime = np.take(y_data, idx_train_prime, axis=0)
+
+            train_loader_prime = torch.utils.data.DataLoader(
+                TensorDataset(torch.Tensor(x_train_prime), torch.Tensor(y_train_prime)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
+            
             # Train and save
-            # We train multiple versions of the model to introduce randomness
-            for j in range(args.num_models):
-                train_and_save_private_model(i, j, new_train_loader, criterion, epochs, batch_size)
+            for j in range(args.num_models):  # We train multiple versions of the model to introduce randomness
+                train_and_save_private_model(i, j, train_loader_prime, criterion, epochs, batch_size)
 
         # Evaluate leave-one-out private models
         for i in outlier_indices:
