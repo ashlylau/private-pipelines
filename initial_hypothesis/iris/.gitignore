@@ -4,3 +4,4 @@ __pycache__/
 # Temporary
 compute_dp_sgd_privacy.py
 compute_privacy.py
+models/

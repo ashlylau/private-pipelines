@@ -159,6 +159,9 @@ class pystatdp:
         # claimed privacy level to check
         claimed_privacy = privacy
 
+        # print("algorithm: {}".format(str(algo)[8:-2]))
+        algo_name = str(algo)[8:-2].replace('.', '_')
+
         for i, (algorithm, kwargs, sensitivity) in enumerate(tasks):
             start_time = time.time()
             results = {}
@@ -171,20 +174,20 @@ class pystatdp:
                 results[privacy_budget] = self.detect_counterexample(
                     algorithm, test_privacy, kwargs, sensitivity=sensitivity, event_iterations=e_iter, detect_iterations=d_iter)
 
-            # dump the results to file
-            json_file = Path.cwd() / f'{algorithm.__name__}_{flag_file}.json'
+            # # dump the results to file
+            # json_file = Path.cwd() / f'{algo_name}_{flag_file}.json'
 
-            with json_file.open('w') as f:
-                json.dump(encode(results, unpicklable=False), f)
+            # with json_file.open('w') as f:
+            #     json.dump(encode(results, unpicklable=False), f)
 
-            # plot and save to file
-            plot_file = Path.cwd() / f'{algorithm.__name__}_{flag_file}.pdf'
+            # # plot and save to file
+            # plot_file = Path.cwd() / f'{algo_name}_{flag_file}.pdf'
 
-            self.plot_result(results, r'Test $\epsilon$', 'P Value',
-                             algorithm.__name__.replace('_', ' ').title(), plot_file)
+            # self.plot_result(results, r'Test $\epsilon$', 'P Value',
+            #                  algo_name.replace('_', ' ').title(), plot_file)
 
             total_time, total_detections = time.time() - start_time, len(claimed_privacy) * \
                 len(test_privacy)
-            logger.info(f'[{i + 1} / {len(tasks)}]: {algorithm.__name__} | Time elapsed: {total_time:5.3f}s | '
+            logger.info(f'[{i + 1} / {len(tasks)}]: {algo_name} | Time elapsed: {total_time:5.3f}s | '
                         f'Average time per detection: {total_time / total_detections:5.3f}s')
-        return 0
+        return results

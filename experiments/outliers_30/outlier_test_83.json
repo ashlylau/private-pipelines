@@ -1,0 +1,25 @@
+{
+  "training_info": {
+    "train_all": true,
+    "epochs": 20,
+    "batch_size": 8,
+    "num_models": 30,
+    "learning_rate": 0.15,
+    "epsilon": 3.9117407067867584,
+    "delta": 0.01,
+    "best_alpha": 3.5
+  },
+  "measured_epsilon": 5.0,
+  "batch_number": 1,
+  "x_test": {
+    "index": 83,
+    "x": [
+      6.0,
+      2.7,
+      5.1,
+      1.6
+    ],
+    "y": 1
+  },
+  "results": "[[3.0, 4.882647837165874e-05, [-1], [93], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{}, 1], \"privacy\": 5.0}, [0]], [4.0, 0.08570381256884632, [-1], [93], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{}, 1], \"privacy\": 5.0}, [0]], [5.0, 1.0, [-1], [14], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{}, 1], \"privacy\": 5.0}, [1]], [6.0, 1.0, [-1], [13], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{}, 1], \"privacy\": 5.0}, [1]], [7.0, 1.0, [-1], [15], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{}, 1], \"privacy\": 5.0}, [2]]]"
+}

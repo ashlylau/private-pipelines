@@ -96,7 +96,7 @@ def run_algorithm(algorithm, d1, d2, kwargs, event, total_iterations):
 
                     # categorical output
                     # I changed this here to <= because I don't understand why the arbitrary '* 0.002' is here.
-                    if len(unique) <= iterations * 0.002:
+                    if len(unique) <= iterations * 0.01:
                         event_search_space.append(
                             tuple(int(key) for key in unique))
                     else:

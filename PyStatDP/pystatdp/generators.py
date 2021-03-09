@@ -25,8 +25,8 @@ import enum
 import numpy as np
 from logging import getLogger
 
-sys.path.append(os.path.abspath('../initial_hypothesis/iris'))
-from data import outlier_indices
+sys.path.append(os.path.abspath('../../initial_hypothesis/iris'))
+from iris import absolute_model_path
 
 logger = getLogger(__name__)
 
@@ -72,8 +72,20 @@ def generate_databases(algorithm, num_input, default_kwargs, sensitivity=ALL_DIF
             'sensitivity must be pystatdp.ALL_DIFFER or pystatdp.ONE_DIFFER or pystatdp.ML_DIFFER')
     if sensitivity == ML_DIFFER:
         d1 = -1  # This will be the model trained with the full dataset.
+
+        # Get valid models from given batch.
+        _, batch_number = default_kwargs["param_for_algorithm"]
+        model_names = os.listdir(absolute_model_path + "/batch-" + str(batch_number))
+        model_indices = []
+        for model_name in model_names:
+            if model_name == 'training_info.json':
+                continue
+            model_index = int(str(model_name)[6:])
+            if model_index != -1:
+                model_indices.append(model_index)
+        
         # Tuples will represent model number pairs to test.
-        candidates = [([d1], [d2]) for d2 in outlier_indices]  # Hard coded with length of data for now.
+        candidates = [([d1], [d2]) for d2 in model_indices]
     else:
         # assume maximum distance is 1
         d1 = np.ones(num_input, dtype=int)

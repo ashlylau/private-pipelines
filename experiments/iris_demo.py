@@ -42,9 +42,9 @@ if __name__ == "__main__":
     # Load data
     iris = load_iris()
     x_data = iris.data
-    rand_point = random.choice(outlier_indices)
+    rand_point = random.choice(likely_misclassified_points)
     x_test = x_data[rand_point]
-    print("x_test (element {}): {}".format(rand_point, x_test))
+    print("x_test (element {}): {} (class = {})".format(rand_point, x_test, iris.target[rand_point]))
 
     # def main(self, algo, param, privacy, e_iter=100000, d_iter=500000, test_range=0.1, n_checks=3):
-    psd.main(PredictIris, torch.Tensor(x_test), tuple((2.0,)), e_iter=1000, d_iter=5000, test_range=0.5, n_checks=8, sensitivity=ML_DIFFER)
+    results = psd.main(PredictIris, tuple((torch.Tensor(x_test), -1)), tuple((4.0,)), e_iter=1000, d_iter=5000, test_range=1.0, n_checks=10, sensitivity=ML_DIFFER)
