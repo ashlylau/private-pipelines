@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 
 model_path = "models/batch-"
 absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/iris/models"
+# absolute_model_path = "/Users/ashlylau/Desktop/year4/Indiv Project/private-pipelines/initial_hypothesis/iris/models"
 
 # Algorithm for hypothesis test
 class PredictIris():
@@ -60,7 +61,7 @@ def predict(model_number, x_test, batch_number):
     # print("Model number: {}, prediction for x_test {} = {}".format(model_number, x_test, y_pred.item()))
     return y_pred.item()
 
-def train(model, criterion, optimizer, epochs, train_loader, train_private=True):
+def train(model, criterion, optimizer, epochs, train_loader, train_private=True, delta=0.01):
     losses = []
     for _ in range(epochs):
         for _, (x, y) in enumerate(train_loader):
@@ -74,9 +75,8 @@ def train(model, criterion, optimizer, epochs, train_loader, train_private=True)
             optimizer.step()
 
     # Print privacy budget spent.
-    epsilon, delta, best_alpha = (-1,-1,-1)
+    epsilon, best_alpha = (-1,-1)
     if train_private:
-        delta = 0.01
         epsilon, best_alpha = optimizer.privacy_engine.get_privacy_spent(delta)
         print(
             f"Train Epoch: {epochs} \t"
@@ -96,7 +96,6 @@ def test(model, test_loader):
 
             preds.extend(y_hat)
             num_correct += (y_hat == y).sum()
-
     acc = float(num_correct) / len(preds)
     print('Got %d / %d correct (%.2f)' % (num_correct, len(preds), 100 * acc))
     return acc
@@ -118,7 +117,7 @@ def load_model(i, j, batch_number):
     new_model.eval()
     return new_model
 
-def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_size, learning_rate, batch_number):
+def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_size, learning_rate, noise_multiplier, delta, batch_number):
     priv_model = IrisModel()
     priv_optimizer = torch.optim.Adam(priv_model.parameters(), lr=learning_rate)
     privacy_engine = PrivacyEngine(
@@ -126,12 +125,12 @@ def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_si
         batch_size=batch_size,
         sample_size=len(train_loader.dataset),
         alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
-        noise_multiplier=1.3,
+        noise_multiplier=noise_multiplier,
         max_grad_norm=1.0
     )
     privacy_engine.attach(priv_optimizer)
     print("Training model {}:".format(i))
-    losses, epsilon, delta, best_alpha = train(priv_model, criterion, priv_optimizer, epochs, train_loader, True)
+    losses, epsilon, delta, best_alpha = train(priv_model, criterion, priv_optimizer, epochs, train_loader, True, delta)
     
     # # Plot loss
     # plt.plot(range(len(losses)), losses)

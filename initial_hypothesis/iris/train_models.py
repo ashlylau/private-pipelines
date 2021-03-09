@@ -29,6 +29,8 @@ def main():
     parser.add_argument('--batch_size', type=int, default=16, help='batch size')
     parser.add_argument('--num_models', type=int, default=3, help='number of models to train for each D')
     parser.add_argument('--learning_rate', type=float, default=0.15, help='learning rate')
+    parser.add_argument('--noise_multiplier', type=float, default=1.3, help='noise multiplier')
+    parser.add_argument('--delta', type=float, default=0.01, help='delta')
     args = parser.parse_args()
 
     # Create new model directory to save trained models.
@@ -54,6 +56,7 @@ def main():
     # Get D and D' points.
     d_points_to_train = np.arange(150)  # Size of iris dataset
     d_points_to_train = np.delete(d_points_to_train, outlier_indices)  # Train normal models
+    # d_points_to_train = outlier_indices
 
     x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(x_data, y_data, indices, test_size=0.2, random_state=42)
 
@@ -68,7 +71,7 @@ def main():
     # Train main private model
     losses, epsilon, delta, best_alpha = (-1,-1,-1,-1)
     for j in range(args.num_models):
-        losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, criterion, epochs, batch_size, args.learning_rate, batch_number)
+        losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, criterion, epochs, batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number)
         
     # Train non-private model
     non_private_model = IrisModel()
@@ -99,7 +102,7 @@ def main():
             
             # Train and save
             for j in range(args.num_models):  # We train multiple versions of the model to introduce randomness
-                train_and_save_private_model(i, j, train_loader_prime, criterion, epochs, batch_size, args.learning_rate, batch_number)
+                train_and_save_private_model(i, j, train_loader_prime, criterion, epochs, batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number)
 
         # Evaluate leave-one-out private models
         total_accuracy = 0
