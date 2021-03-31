@@ -1,0 +1,35 @@
+{
+  "experiment_args": {
+    "plot_all": false,
+    "privacy": 3.0,
+    "test_range": 0.5,
+    "n_checks": 7,
+    "batch_number": 4,
+    "threshold": 0.9
+  },
+  "x_test": [
+    70,
+    138,
+    72,
+    133,
+    83,
+    133,
+    106,
+    84,
+    119,
+    72
+  ],
+  "measured_epsilon": [
+    2.5,
+    4.5,
+    2.5,
+    3.5,
+    4.0,
+    3.5,
+    4.0,
+    2.0,
+    1.5,
+    2.5
+  ],
+  "avg_epsilon": 3.05
+}
