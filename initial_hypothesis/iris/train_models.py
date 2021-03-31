@@ -56,7 +56,7 @@ def main():
     # Get D and D' points.
     d_points_to_train = np.arange(150)  # Size of iris dataset
     d_points_to_train = np.delete(d_points_to_train, outlier_indices)  # Train normal models
-    # d_points_to_train = outlier_indices
+    # d_points_to_train = outlier_indices  # Train outlier models.
 
     x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(x_data, y_data, indices, test_size=0.2, random_state=42)
 
