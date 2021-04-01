@@ -2,6 +2,7 @@ import os
 import argparse
 import torch
 import json
+import random
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
@@ -39,6 +40,7 @@ def main():
     try:
         os.makedirs('models/batch-{}'.format(batch_number))
     except FileExistsError:
+        print('error creating file :( current path: {}'.format(Path.cwd()))
         pass
 
     # Define hyperparameters
@@ -55,7 +57,9 @@ def main():
 
     # Get D and D' points.
     d_points_to_train = np.arange(150)  # Size of iris dataset
-    d_points_to_train = np.delete(d_points_to_train, outlier_indices)  # Train normal models
+    d_points_to_train = np.delete(d_points_to_train, outlier_indices)
+    print(type(d_points_to_train))
+    d_points_to_train = random.sample(list(d_points_to_train), len(outlier_indices))  # Train same number of normal models
     # d_points_to_train = outlier_indices  # Train outlier models.
 
     x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(x_data, y_data, indices, test_size=0.2, random_state=42)
@@ -123,7 +127,7 @@ def main():
         training_info['best_alpha'] = best_alpha
         training_info['model_accuracy'] = total_accuracy/num_points
 
-        json_file = Path.cwd() / f'models/batch-{batch_number}/training_info.json'
+        json_file = Path.cwd() / ("models/batch-{}/training_info.json".format(batch_number))
         with json_file.open('w') as f:
             json.dump(training_info, f, indent="  ")
 
