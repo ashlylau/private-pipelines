@@ -14,6 +14,7 @@ from sklearn.datasets import load_iris
 from keras.utils import to_categorical
 from opacus import PrivacyEngine
 from pathlib import Path
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -33,6 +34,18 @@ def main():
     parser.add_argument('--noise_multiplier', type=float, default=1.3, help='noise multiplier')
     parser.add_argument('--delta', type=float, default=0.01, help='delta')
     args = parser.parse_args()
+
+    start_time = datetime.now()
+
+    # Check whether torch can use cuda
+    print("Torch is available: {}".format(torch.cuda.is_available()))
+    curr_device = torch.cuda.current_device()
+    print("torch.cuda.current_device(): {}".format(curr_device))
+    torch.cuda.device(curr_device)
+    print("torch.cuda.device_count(): {}".format(torch.cuda.device_count()))
+    print("torch.cuda.get_device_name(): {}".format(torch.cuda.get_device_name(curr_device)))
+    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Create new model directory to save trained models.
     batch_number = len(os.listdir(absolute_model_path))
@@ -55,10 +68,9 @@ def main():
     y_data = to_categorical(y_data)
     indices = np.arange(len(x_data))  # Get original indices
 
-    # Get D and D' points.
+    # Get D and D' points. **** MODIFY THIS TO CHANGE D' ****
     d_points_to_train = np.arange(150)  # Size of iris dataset
     d_points_to_train = np.delete(d_points_to_train, outlier_indices)
-    print(type(d_points_to_train))
     d_points_to_train = random.sample(list(d_points_to_train), len(outlier_indices))  # Train same number of normal models
     # d_points_to_train = outlier_indices  # Train outlier models.
 
@@ -78,7 +90,8 @@ def main():
         losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, criterion, epochs, batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number)
         
     # Train non-private model
-    non_private_model = IrisModel()
+    non_private_model = IrisModel().to(device)
+    non_private_model.to(device)
     optimizer = torch.optim.Adam(non_private_model.parameters(), lr=args.learning_rate)
     _ = train(non_private_model, criterion, optimizer, epochs, train_loader, False)
 
@@ -130,6 +143,9 @@ def main():
         json_file = Path.cwd() / ("models/batch-{}/training_info.json".format(batch_number))
         with json_file.open('w') as f:
             json.dump(training_info, f, indent="  ")
+
+    time_elapsed = datetime.now() - start_time
+    print("Training time: {}".format(time_elapsed))
 
 if __name__ == "__main__":
     main()

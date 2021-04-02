@@ -16,6 +16,9 @@ model_path = "models/batch-"
 absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/iris/models"
 # absolute_model_path = "/Users/ashlylau/Desktop/year4/Indiv Project/private-pipelines/initial_hypothesis/iris/models"
 
+use_cuda = torch.cuda.is_available()
+device = torch.device('cuda' if use_cuda else 'cpu')
+
 # Algorithm for hypothesis test
 class PredictIris():
     def __init__(self, epsilon, args):
@@ -65,6 +68,8 @@ def train(model, criterion, optimizer, epochs, train_loader, train_private=True,
     losses = []
     for _ in range(epochs):
         for _, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
             y_pred = model.forward(x)
             loss = criterion(y_pred, torch.max(y, 1)[1])
             losses.append(loss)
@@ -90,6 +95,8 @@ def test(model, test_loader):
     preds = []
     with torch.no_grad():
         for _, (x, y) in enumerate(test_loader):
+            x = x.to(device)
+            y = y.to(device)
             y_hat = model.forward(x)
             y_hat = y_hat.argmax(dim=1)
             y = y.argmax(dim=1)
@@ -110,7 +117,7 @@ def save_model(model, i, j, batch_number):
     torch.save(model.state_dict(), model_path + str(batch_number) + "/model-" + str(i) + "/" + str(j) + ".pt")
 
 def load_model(i, j, batch_number):
-    new_model = IrisModel()
+    new_model = IrisModel().to(device)
     new_model.load_state_dict(torch.load(absolute_model_path + "/batch-" + str(batch_number) + "/model-" + str(i) + "/" + str(j) + ".pt"))
     # Call model.eval() to set dropout and batch normalization layers to evaluation mode before running inference. 
     # Failing to do this will yield inconsistent inference results.
@@ -118,7 +125,7 @@ def load_model(i, j, batch_number):
     return new_model
 
 def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_size, learning_rate, noise_multiplier, delta, batch_number):
-    priv_model = IrisModel()
+    priv_model = IrisModel().to(device)
     priv_optimizer = torch.optim.Adam(priv_model.parameters(), lr=learning_rate)
     privacy_engine = PrivacyEngine(
         priv_model,
