@@ -2,3 +2,4 @@ env/
 training_loss/
 __pycache__/
 models/
+data/

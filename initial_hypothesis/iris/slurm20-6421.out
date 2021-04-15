@@ -1,0 +1,402 @@
+2021-04-02 09:40:38.778604: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+Torch is available: True
+torch.cuda.current_device(): 0
+torch.cuda.device_count(): 1
+torch.cuda.get_device_name(): Tesla T4
+batch number: 6
+Training model -1:
+Train Epoch: 20 	(ε = 3.91, δ = 0.01) for α = 3.5
+Training model -1:
+Train Epoch: 20 	(ε = 3.91, δ = 0.01) for α = 3.5
+Training model -1:
+Train Epoch: 20 	(ε = 3.91, δ = 0.01) for α = 3.5
+Training model -1:
+Train Epoch: 20 	(ε = 3.91, δ = 0.01) for α = 3.5
+Training model -1:
+Train Epoch: 20 	(ε = 3.91, δ = 0.01) for α = 3.5
+Got 19 / 24 correct (79.17)
+Full private model accuracy: 0.7916666666666666
+Got 16 / 24 correct (66.67)
+Original model accuracy: 0.6666666666666666
+Training model 34:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 34:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 34:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 34:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 34:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 95:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 95:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 95:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 95:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 95:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 79:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 79:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 79:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 79:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 79:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 142:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 142:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 142:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 142:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 142:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 23:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 23:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 23:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 23:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 23:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 49:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 49:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 49:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 49:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 49:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 51:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 51:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 51:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 51:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 51:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 6:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 6:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 6:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 6:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 6:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 57:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 57:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 57:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 57:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 57:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 120:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 120:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 120:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 120:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 120:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 98:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 98:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 98:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 98:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 98:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 137:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 137:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 137:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 137:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 137:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 86:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 86:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 86:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 86:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 86:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 96:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 96:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 96:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 96:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 96:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 39:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 39:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 39:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 39:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 39:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 50:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 50:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 50:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 50:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 50:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 3:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 3:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 3:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 3:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 3:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 134:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 134:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 134:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 134:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 134:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 52:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 52:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 52:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 52:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 52:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 1:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 1:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 1:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 1:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 1:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 24:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 24:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 24:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 24:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 24:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 88:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 88:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 88:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 88:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 88:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 84:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 84:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 84:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 84:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 84:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 4:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 4:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 4:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 4:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 4:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 124:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 124:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 124:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 124:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 124:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 21:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 21:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 21:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 21:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 21:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 99:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 99:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 99:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 99:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 99:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 91:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 91:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 91:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 91:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 91:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 66:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 66:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 66:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 66:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 66:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 67:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 67:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 67:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 67:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Training model 67:
+Train Epoch: 20 	(ε = 3.81, δ = 0.01) for α = 3.6
+Got 12 / 24 correct (50.00)
+Model 34 accuracy: 0.5
+Got 13 / 24 correct (54.17)
+Model 95 accuracy: 0.5416666666666666
+Got 22 / 24 correct (91.67)
+Model 79 accuracy: 0.9166666666666666
+Got 17 / 24 correct (70.83)
+Model 142 accuracy: 0.7083333333333334
+Got 19 / 24 correct (79.17)
+Model 23 accuracy: 0.7916666666666666
+Got 16 / 24 correct (66.67)
+Model 49 accuracy: 0.6666666666666666
+Got 20 / 24 correct (83.33)
+Model 51 accuracy: 0.8333333333333334
+Got 15 / 24 correct (62.50)
+Model 6 accuracy: 0.625
+Got 9 / 24 correct (37.50)
+Model 57 accuracy: 0.375
+Got 19 / 24 correct (79.17)
+Model 120 accuracy: 0.7916666666666666
+Got 20 / 24 correct (83.33)
+Model 98 accuracy: 0.8333333333333334
+Got 19 / 24 correct (79.17)
+Model 137 accuracy: 0.7916666666666666
+Got 20 / 24 correct (83.33)
+Model 86 accuracy: 0.8333333333333334
+Got 24 / 24 correct (100.00)
+Model 96 accuracy: 1.0
+Got 13 / 24 correct (54.17)
+Model 39 accuracy: 0.5416666666666666
+Got 22 / 24 correct (91.67)
+Model 50 accuracy: 0.9166666666666666
+Got 18 / 24 correct (75.00)
+Model 3 accuracy: 0.75
+Got 20 / 24 correct (83.33)
+Model 134 accuracy: 0.8333333333333334
+Got 18 / 24 correct (75.00)
+Model 52 accuracy: 0.75
+Got 21 / 24 correct (87.50)
+Model 1 accuracy: 0.875
+Got 23 / 24 correct (95.83)
+Model 24 accuracy: 0.9583333333333334
+Got 16 / 24 correct (66.67)
+Model 88 accuracy: 0.6666666666666666
+Got 17 / 24 correct (70.83)
+Model 84 accuracy: 0.7083333333333334
+Got 19 / 24 correct (79.17)
+Model 4 accuracy: 0.7916666666666666
+Got 12 / 24 correct (50.00)
+Model 124 accuracy: 0.5
+Got 16 / 24 correct (66.67)
+Model 21 accuracy: 0.6666666666666666
+Got 20 / 24 correct (83.33)
+Model 99 accuracy: 0.8333333333333334
+Got 16 / 24 correct (66.67)
+Model 91 accuracy: 0.6666666666666666
+Got 20 / 24 correct (83.33)
+Model 66 accuracy: 0.8333333333333334
+Got 23 / 24 correct (95.83)
+Model 67 accuracy: 0.9583333333333334
+Training time: 0:03:15.429887
+Fri Apr  2 09:44:02 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 460.39       Driver Version: 460.39       CUDA Version: 11.2     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            On   | 00000000:00:06.0 Off |                    0 |
+| N/A   52C    P0    28W /  70W |      0MiB / 15109MiB |     14%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+ 09:44:02 up 19:41,  0 users,  load average: 2.04, 1.57, 1.32

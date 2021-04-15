@@ -80,9 +80,9 @@ def main():
     assert(np.all((x_train == np.take(x_data, idx_train, axis=0))))
 
     train_loader = torch.utils.data.DataLoader(
-        TensorDataset(torch.Tensor(x_train), torch.Tensor(y_train)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
+        TensorDataset(torch.Tensor(x_train), torch.Tensor(y_train)), batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=True)
     test_loader = torch.utils.data.DataLoader(
-        TensorDataset(torch.Tensor(x_test), torch.Tensor(y_test)), batch_size=batch_size, shuffle=True, num_workers=0, drop_last=True)
+        TensorDataset(torch.Tensor(x_test), torch.Tensor(y_test)), batch_size=args.batch_size, shuffle=True, num_workers=0, drop_last=True)
 
     # Train main private model
     losses, epsilon, delta, best_alpha = (-1,-1,-1,-1)
