@@ -1,0 +1,119 @@
+2021-04-15 18:46:13.718569: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+Torch is available: True
+torch.cuda.current_device(): 0
+torch.cuda.device_count(): 1
+torch.cuda.get_device_name(): Tesla T4
+['batch-1', 'batch-2']
+batch number: 3
+Created directory.
+Size of full dataset: (48841, 15)
+age               0
+workclass         0
+fnlwht            0
+education         0
+education-num     0
+marital-status    0
+occupation        0
+relationship      0
+race              0
+sex               0
+capital-gain      0
+capital-loss      0
+hours-per-week    0
+native-country    0
+income            0
+dtype: int64
+   workclass_Federal-gov  workclass_Local-gov  ...  sex_Female  sex_Male
+0                      0                    0  ...           0         1
+1                      0                    0  ...           0         1
+2                      0                    0  ...           0         1
+3                      0                    0  ...           1         0
+4                      0                    0  ...           1         0
+
+[5 rows x 98 columns]
+   age  education-num  capital-gain  ...  race_White  sex_Female  sex_Male
+0   50             13             0  ...           1           0         1
+1   38              9             0  ...           1           0         1
+2   53              7             0  ...           0           0         1
+3   28             13             0  ...           0           1         0
+4   37             14             0  ...           1           1         0
+
+[5 rows x 103 columns]
+len(idx_train): 36825
+len(idx_test): 9207
+Training non-private model...
+Non-private model training on 20 epochs done in  0:00:16.386606  seconds
+Training model -1:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+
+Test set: Average loss: 0.3332, Accuracy: 7785/9207 (85%)
+
+Original model accuracy: 0.8455522971652004
+
+Test set: Average loss: 0.4592, Accuracy: 7564/9207 (82%)
+
+Full private model accuracy: 0.8215488215488216
+Training model 2:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+Training model 3:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+Training model 5:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+Training model 6:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+Training model 8:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+Training model 9:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+Training model 10:
+Train Epoch: 20 	(ε = 1.22, δ = 1e-05) for α = 18.0
+
+Test set: Average loss: 0.4684, Accuracy: 7545/9207 (82%)
+
+Model 2 accuracy: 0.819485174323884
+
+Test set: Average loss: 0.4686, Accuracy: 7547/9207 (82%)
+
+Model 3 accuracy: 0.8197024003475616
+
+Test set: Average loss: 0.4787, Accuracy: 7548/9207 (82%)
+
+Model 5 accuracy: 0.8198110133594004
+
+Test set: Average loss: 0.4698, Accuracy: 7555/9207 (82%)
+
+Model 6 accuracy: 0.8205713044422722
+
+Test set: Average loss: 0.4700, Accuracy: 7551/9207 (82%)
+
+Model 8 accuracy: 0.820136852394917
+
+Test set: Average loss: 0.4825, Accuracy: 7557/9207 (82%)
+
+Model 9 accuracy: 0.8207885304659498
+
+Test set: Average loss: 0.4570, Accuracy: 7558/9207 (82%)
+
+Model 10 accuracy: 0.8208971434777886
+Training time: 0:03:25.037644
+Thu Apr 15 18:49:55 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 460.39       Driver Version: 460.39       CUDA Version: 11.2     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            On   | 00000000:00:07.0 Off |                    0 |
+| N/A   44C    P0    30W /  70W |      0MiB / 15109MiB |      1%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+ 18:49:55 up 14 days,  4:48,  2 users,  load average: 2.94, 2.68, 2.07

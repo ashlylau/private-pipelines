@@ -23,7 +23,8 @@ import matplotlib.pyplot as plt
 
 from data import outlier_indices
 from preprocess import read_data, preprocess
-from adult import AdultModel, train, test, absolute_model_path
+from adult import AdultModel, train, test, train_and_save_private_model, save_model, load_model, absolute_model_path
+
 
 def main():
     parser = argparse.ArgumentParser(description='Adult Income Prediction')
@@ -34,7 +35,7 @@ def main():
     parser.add_argument('--num_models', type=int, default=3, help='number of models to train for each D')
     parser.add_argument('--learning_rate', type=float, default=0.00025, help='learning rate')
     parser.add_argument('--noise_multiplier', type=float, default=1.3, help='noise multiplier')
-    parser.add_argument('--delta', type=float, default=0.01, help='delta')
+    parser.add_argument('--delta', type=float, default=0.00001, help='delta')
     args = parser.parse_args()
 
     start_time = datetime.now()
@@ -53,7 +54,7 @@ def main():
     batch_number = len(os.listdir(absolute_model_path))
     print('batch number: {}'.format(batch_number))
     try:
-        os.makedirs('models/batch-{}'.format(batch_number))
+        os.makedirs('{}/batch-{}'.format(absolute_model_path, batch_number))
         print("Created directory.")
     except FileExistsError:
         print('error creating file :( current path: {}'.format(Path.cwd()))
@@ -78,9 +79,13 @@ def main():
     num_features = x_data_df.shape[1]
 
     # Get D and D' points. **** MODIFY THIS TO CHANGE D' ****
-    # TODO
+    d_points_to_train = outlier_indices
 
+    # Split data
     df_X_train, df_X_test, df_y_train, df_y_test, idx_train, idx_test = train_test_split(x_data_df, y_data_df, indices, test_size=0.20, random_state=42)
+
+    # Check that indices line up
+    assert(np.all((df_X_train.values == np.take(x_data_df.values, idx_train, axis=0))))
 
     # Normalise data
     scaler = StandardScaler()
@@ -114,58 +119,73 @@ def main():
     model = AdultModel(input_size, num_classes).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=weight_decay)
 
-    print('Training non-priavte model...')
-    start_time = time.time()
-
-    for epoch in range(1, args.epochs+1):
-        print('Epoch ', epoch, ':')
-        train(model, loss_fn, train_loader, optimizer, epoch)
-        loss, acc = test(model, val_loader, test_loss_fn)
-        
-        # save results every epoch
-        test_accuracy.append(acc)
-        train_loss.append(loss)
- 
-    end_time = time.time()
+    print('Training non-private model...')
+    start_time = datetime.now()
+    _ = train(model, loss_fn, optimizer, args.epochs, train_loader, False)
+    end_time = datetime.now()
     print('Non-private model training on ' + str(args.epochs) + ' epochs done in ', str(end_time-start_time),' seconds')
    
 
-    # Train private model:
-    private_model = AdultModel(num_features, 2).to(device)
-    priv_optimizer = torch.optim.Adam(private_model.parameters(), lr=args.learning_rate, weight_decay=weight_decay)
-    privacy_engine = PrivacyEngine(
-        private_model,
-        batch_size=args.batch_size,
-        sample_size=len(train_loader.dataset),
-        alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
-        noise_multiplier=args.noise_multiplier,
-        max_grad_norm=1.0
-    )
-    privacy_engine.attach(priv_optimizer)
-    print('Training private model...')
-    start_time = time.time()
-
-    for epoch in range(1, args.epochs+1):
-        print('Epoch ', epoch, ':')
-        train(private_model, loss_fn, train_loader, priv_optimizer, epoch)
-        loss, acc = test(private_model, val_loader, test_loss_fn)
-        
-        # save results every epoch
-        test_accuracy.append(acc)
-        train_loss.append(loss)
-        
-    end_time = time.time()
-    print('Private model training on ' + str(args.epochs) + ' epochs done in ', str(end_time-start_time),' seconds')
- 
-    # TODO: leave one out models.
-
+    # Train main private model:
+    losses, epsilon, delta, best_alpha = (-1,-1,-1,-1)
+    for j in range(args.num_models):
+        losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, loss_fn, args.epochs, args.batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number, num_features, num_classes)
+       
     # Evaluate models
     loss, accuracy = test(model, val_loader, test_loss_fn)
     print("Original model accuracy: {}".format(accuracy))
 
-    loss, accuracy = test(private_model, val_loader, test_loss_fn)
+    loss, accuracy = test(load_model(-1, 0, batch_number, num_features, num_classes), val_loader, test_loss_fn)
     print("Full private model accuracy: {}".format(accuracy))
 
+    # Train leave-one-out models
+    if args.train_all:
+        for i in d_points_to_train:
+            if i in idx_test:
+                continue
+
+            assert(i in idx_train)
+            # Remove sample and label at original index i
+            idx_train_prime = idx_train[idx_train != i]
+            X_train_prime = np.take(x_data_df.values, idx_train_prime, axis=0)
+            X_train_prime = scaler.fit_transform(X_train_prime)
+            y_train_prime = np.take(y_data_df.values, idx_train_prime, axis=0)
+
+            train_inputs_prime = torch.from_numpy(X_train_prime).to(torch.float64)
+            train_targets_prime = torch.from_numpy(y_train_prime)
+
+            train_ds_prime = TensorDataset(train_inputs_prime, train_targets_prime)
+            train_loader_prime = DataLoader(train_ds_prime, args.batch_size, shuffle=True, num_workers=4, pin_memory=True)
+
+            # Train and save
+            for j in range(args.num_models):
+                train_and_save_private_model(i, j, train_loader_prime, loss_fn, args.epochs, args.batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number, num_features, num_classes)
+
+        # Evaluate leave-one-out private models
+        total_accuracy = 0
+        num_points = 0
+        for i in d_points_to_train:
+            if i in idx_test:
+                continue
+            model = load_model(i, 0, batch_number, num_features, num_classes)
+            loss, accuracy = test(model, val_loader, test_loss_fn)
+            total_accuracy += accuracy
+            num_points += 1
+            print("Model {} accuracy: {}".format(i, accuracy))
+        
+        # Write training parameters to file.
+        training_info = vars(args)
+        training_info['epsilon'] = epsilon
+        training_info['delta'] = delta
+        training_info['best_alpha'] = best_alpha
+        training_info['model_accuracy'] = total_accuracy/num_points
+
+        json_file = Path.cwd() / ("models/batch-{}/training_info.json".format(batch_number))
+        with json_file.open('w') as f:
+            json.dump(training_info, f, indent="  ")
+
+    time_elapsed = datetime.now() - start_time
+    print("Training time: {}".format(time_elapsed))
 
 if __name__ == "__main__":
     main()
