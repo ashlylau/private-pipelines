@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from data import outlier_indices
+from adult_data import outlier_indices
 from preprocess import read_data, preprocess
 from adult import AdultModel, train, test, train_and_save_private_model, save_model, load_model, absolute_model_path
 
@@ -69,8 +69,8 @@ def main():
     test_loss_fn = nn.CrossEntropyLoss(reduction='sum')
 
     # Get data
-    train_data_df = read_data("data/adult.data")
-    test_data_df = read_data("data/adult.test")
+    train_data_df = read_data("adult_data/adult.data")
+    test_data_df = read_data("adult_data/adult.test")
     full_data_df = train_data_df.append(test_data_df)
     print("Size of full dataset: {}".format(full_data_df.shape))
 

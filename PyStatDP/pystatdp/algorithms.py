@@ -34,7 +34,8 @@ algo_dict = {
         'Percentile': 'example call with parameters: dp.Percentile(epsilon)'
     },
     'machine_learning': {
-        'PredictIris': 'example call with parameters: PredictIris(epsilon, x_test)'
+        'iris.PredictIris': 'example call with parameters: PredictIris(epsilon, x_test)',
+        'adult.PredictAdult': 'example call with parameters: PredictAdult(epsilon, x_test)'
     },
 }
 
@@ -53,10 +54,9 @@ def generic_method_pydp(queries, privacy, algorithm, param_for_algorithm):
     '''
     if type(queries) != list:
         queries = queries.tolist()
-    # print(algo_dict[str(algorithm)[13:-2]])
     if str(algorithm)[13:-2] in algo_dict['order_statistics'].keys():
         return algorithm(privacy).quick_result(queries, privacy)
-    elif str(algorithm)[13:-2] in algo_dict['machine_learning'].keys():
+    elif str(algorithm)[8:-2] in algo_dict['machine_learning'].keys():
         return algorithm(privacy, param_for_algorithm).quick_result(queries)
     else:
         return algorithm(privacy, *param_for_algorithm).quick_result(queries)

@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from data import outlier_indices
+from adult_data import outlier_indices
 from preprocess import read_data, preprocess
 from adult import AdultModel, train, test, train_and_save_private_model, save_model, load_model, absolute_model_path
 

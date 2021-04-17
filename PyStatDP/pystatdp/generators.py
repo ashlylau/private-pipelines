@@ -27,6 +27,11 @@ from logging import getLogger
 
 sys.path.append(os.path.abspath('../../initial_hypothesis/iris'))
 from iris import absolute_model_path
+iris_model_path = absolute_model_path
+
+sys.path.append(os.path.abspath('../../initial_hypothesis/adult'))
+from adult import absolute_model_path
+adult_model_path = absolute_model_path
 
 logger = getLogger(__name__)
 
@@ -72,6 +77,13 @@ def generate_databases(algorithm, num_input, default_kwargs, sensitivity=ALL_DIF
             'sensitivity must be pystatdp.ALL_DIFFER or pystatdp.ONE_DIFFER or pystatdp.ML_DIFFER')
     if sensitivity == ML_DIFFER:
         d1 = -1  # This will be the model trained with the full dataset.
+
+        algo_name = str(default_kwargs['algorithm'])[8:-2]
+        if algo_name == "adult.PredictAdult":
+            absolute_model_path = adult_model_path
+        else:
+            absolute_model_path = iris_model_path
+        print("model path: {}".format(absolute_model_path))
 
         # Get valid models from given batch.
         _, batch_number = default_kwargs["param_for_algorithm"]

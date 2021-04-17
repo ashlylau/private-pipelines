@@ -54,7 +54,6 @@ def predict(model_number, x_test, batch_number):
     x_test = x_test.to(device)
     with torch.no_grad():
         y_pred = model.forward(x_test).argmax()
-        print(y_pred)
     # print("Model number: {}, prediction for x_test {} = {}".format(model_number, x_test, y_pred.item()))
     return y_pred.item()
 

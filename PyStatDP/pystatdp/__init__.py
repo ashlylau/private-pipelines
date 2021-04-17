@@ -150,6 +150,8 @@ class pystatdp:
             return result
 
     def main(self, algo, param, privacy, e_iter=100000, d_iter=500000, test_range=0.1, n_checks=3, sensitivity=ALL_DIFFER):
+        mp.set_start_method('spawn', force=True)  # For CUDA initialisation
+        
         # list of tasks to test, each tuple contains (function, extra_args, sensitivity)
         tasks = [
             (generic_method_pydp, {'algorithm': algo,
