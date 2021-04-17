@@ -51,7 +51,8 @@ def main():
     batch_number = len(os.listdir(absolute_model_path))
     print('batch number: {}'.format(batch_number))
     try:
-        os.makedirs('models/batch-{}'.format(batch_number))
+        os.makedirs('{}/batch-{}'.format(absolute_model_path, batch_number))
+        print("created folder")
     except FileExistsError:
         print('error creating file :( current path: {}'.format(Path.cwd()))
         pass
@@ -140,7 +141,7 @@ def main():
         training_info['best_alpha'] = best_alpha
         training_info['model_accuracy'] = total_accuracy/num_points
 
-        json_file = Path.cwd() / ("models/batch-{}/training_info.json".format(batch_number))
+        json_file = Path.cwd() / ("{}/batch-{}/training_info.json".format(absolute_model_path, batch_number))
         with json_file.open('w') as f:
             json.dump(training_info, f, indent="  ")
 

@@ -12,7 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 model_path = "models/batch-"
-absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/adult/models"
+absolute_model_path = "/vol/al5217-tmp/adult/models"
+absolute_data_path = "/homes/al5217/private-pipelines/initial_hypothesis/adult/data"
+# absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/adult/models"
 # absolute_model_path = "/Users/ashlylau/Desktop/year4/Indiv Project/private-pipelines/initial_hypothesis/adult/models"
 
 use_cuda = torch.cuda.is_available()
@@ -49,8 +51,10 @@ def predict(model_number, x_test, batch_number):
     model_version = np.random.randint(num_models)
     # print("Chosen model: {}".format(model_version))
     model = load_model(model_number, model_version, batch_number, 97, 2)
+    x_test = x_test.to(device)
     with torch.no_grad():
         y_pred = model.forward(x_test).argmax()
+        print(y_pred)
     # print("Model number: {}, prediction for x_test {} = {}".format(model_number, x_test, y_pred.item()))
     return y_pred.item()
 
@@ -109,10 +113,10 @@ def test(model, test_loader, test_loss_fn):
 def save_model(model, i, j, batch_number):
     # Create folder if it doesn't exist yet.
     try:
-        os.makedirs(model_path + str(batch_number) + "/model-" + str(i))
+        os.makedirs("{}/batch-{}/model-{}".format(absolute_model_path, batch_number, i))
     except FileExistsError:
         pass
-    torch.save(model.state_dict(), model_path + str(batch_number) + "/model-" + str(i) + "/" + str(j) + ".pt")
+    torch.save(model.state_dict(), "{}/batch-{}/model-{}/{}.pt".format(absolute_model_path, batch_number, i, j))
 
 def load_model(i, j, batch_number, num_features, num_classes):
     new_model = AdultModel(num_features, num_classes).to(device)

@@ -79,7 +79,9 @@ def main():
     num_features = x_data_df.shape[1]
 
     # Get D and D' points. **** MODIFY THIS TO CHANGE D' ****
-    d_points_to_train = outlier_indices
+    d_points_to_train = np.arange(len(x_data_df))  # Size of adult dataset
+    d_points_to_train = np.delete(d_points_to_train, outlier_indices)
+    d_points_to_train = random.sample(list(d_points_to_train), len(outlier_indices))  # Train same number of normal models
 
     # Split data
     df_X_train, df_X_test, df_y_train, df_y_test, idx_train, idx_test = train_test_split(x_data_df, y_data_df, indices, test_size=0.20, random_state=42)

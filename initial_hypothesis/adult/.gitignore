@@ -3,3 +3,5 @@ training_loss/
 __pycache__/
 models/
 data/
+# slurm output files
+*.out
