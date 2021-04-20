@@ -1,0 +1,71 @@
+{
+  "experiment_args": {
+    "plot_all": true,
+    "privacy": 3.0,
+    "test_range": 0.5,
+    "n_checks": 11,
+    "batch_number": 2,
+    "threshold": 0.9,
+    "e_iter": 500,
+    "d_iter": 500
+  },
+  "training_info": {
+    "train_all": true,
+    "epochs": 20,
+    "batch_size": 8,
+    "num_models": 100,
+    "learning_rate": 0.15,
+    "epsilon": 3.9117407067867584,
+    "delta": 0.01,
+    "best_alpha": 3.5
+  },
+  "measured_epsilon": 4.5,
+  "batch_number": 2,
+  "p_values": [
+    {
+      "epsilon": 5.5,
+      "p_value": 0.9999999999998945
+    },
+    {
+      "epsilon": 5.0,
+      "p_value": 0.9998751826134463
+    },
+    {
+      "epsilon": 4.5,
+      "p_value": 0.9999922970452404
+    },
+    {
+      "epsilon": 4.0,
+      "p_value": 0.8031056056055759
+    },
+    {
+      "epsilon": 3.5,
+      "p_value": 0.7355868406018005
+    },
+    {
+      "epsilon": 3.0,
+      "p_value": 0.5019189600832269
+    },
+    {
+      "epsilon": 2.5,
+      "p_value": 0.4238302574281434
+    },
+    {
+      "epsilon": 2.0,
+      "p_value": 0.24641846498861014
+    },
+    {
+      "epsilon": 1.5,
+      "p_value": 0.018209356146557595
+    },
+    {
+      "epsilon": 1.0,
+      "p_value": 0.006807474529534175
+    },
+    {
+      "epsilon": 0.5,
+      "p_value": 7.666058921173603e-05
+    }
+  ],
+  "results": "[[0.5, 7.666058921173603e-05, [-1], [144], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 2, 1, 0, 1, 2]], [1.0, 0.006807474529534175, [-1], [37], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [2, 2, 2, 2, 2, 2, 2, 2]], [1.5, 0.018209356146557595, [-1], [144], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 2, 1, 0, 1, 2]], [2.0, 0.24641846498861014, [-1], [37], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [2, 2, 2, 2, 2, 2, 2, 2]], [2.5, 0.4238302574281434, [-1], [117], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 1, 1, 0, 0, 2]], [3.0, 0.5019189600832269, [-1], [144], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 2, 1, 0, 1, 2]], [3.5, 0.7355868406018005, [-1], [144], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 2, 1, 0, 1, 2]], [4.0, 0.8031056056055759, [-1], [144], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 2, 1, 0, 1, 2]], [4.5, 0.9999922970452404, [-1], [130], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 1, 1, 0, 1, 2]], [5.0, 0.9998751826134463, [-1], [130], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 1, 1, 0, 1, 2]], [5.5, 0.9999999999998945, [-1], [60], {\"algorithm\": {\"py/type\": \"iris.PredictIris\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": false, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 8, \"drop_last\": true, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 8, \"drop_last\": true}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 2], \"privacy\": 3.0}, [1, 0, 2, 1, 1, 0, 1, 2]]]"
+}

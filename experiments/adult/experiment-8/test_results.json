@@ -1,0 +1,73 @@
+{
+  "experiment_args": {
+    "plot_all": true,
+    "privacy": 3.0,
+    "test_range": 0.5,
+    "n_checks": 11,
+    "batch_number": 4,
+    "threshold": 0.9,
+    "e_iter": 500,
+    "d_iter": 500
+  },
+  "training_info": {
+    "train_all": true,
+    "epochs": 20,
+    "batch_size": 128,
+    "num_models": 100,
+    "learning_rate": 0.00025,
+    "noise_multiplier": 1.3,
+    "delta": 1e-05,
+    "epsilon": 1.2193386099728354,
+    "best_alpha": 18.0,
+    "model_accuracy": 0.8205515566219378
+  },
+  "measured_epsilon": 4.0,
+  "batch_number": 4,
+  "p_values": [
+    {
+      "epsilon": 5.5,
+      "p_value": 1.0
+    },
+    {
+      "epsilon": 5.0,
+      "p_value": 0.9999999663400702
+    },
+    {
+      "epsilon": 4.5,
+      "p_value": 0.9996743156271672
+    },
+    {
+      "epsilon": 4.0,
+      "p_value": 0.9974260707823626
+    },
+    {
+      "epsilon": 3.5,
+      "p_value": 0.6905805805804595
+    },
+    {
+      "epsilon": 3.0,
+      "p_value": 0.7019915251258471
+    },
+    {
+      "epsilon": 2.5,
+      "p_value": 0.5680292905742408
+    },
+    {
+      "epsilon": 2.0,
+      "p_value": 0.3365224961958841
+    },
+    {
+      "epsilon": 1.5,
+      "p_value": 0.08155079750363863
+    },
+    {
+      "epsilon": 1.0,
+      "p_value": 0.46583639353977946
+    },
+    {
+      "epsilon": 0.5,
+      "p_value": 0.004232934008367137
+    }
+  ],
+  "results": "[[0.5, 0.004232934008367137, [-1], [15568], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [1.0, 0.46583639353977946, [-1], [16044], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [1.5, 0.08155079750363863, [-1], [14755], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [2.0, 0.3365224961958841, [-1], [15568], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [2.5, 0.5680292905742408, [-1], [14755], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [3.0, 0.7019915251258471, [-1], [15568], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [3.5, 0.6905805805804595, [-1], [15568], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [4.0, 0.9974260707823626, [-1], [8962], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [4.5, 0.9996743156271672, [-1], [14448], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [5.0, 0.9999999663400702, [-1], [20415], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]], [5.5, 1.0, [-1], [16044], {\"algorithm\": {\"py/type\": \"adult.PredictAdult\"}, \"param_for_algorithm\": [{\"dataset\": {\"tensors\": [{}, {}]}, \"num_workers\": 0, \"prefetch_factor\": 2, \"pin_memory\": true, \"timeout\": 0, \"worker_init_fn\": null, \"_DataLoader__multiprocessing_context\": null, \"_dataset_kind\": 0, \"batch_size\": 128, \"drop_last\": false, \"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_sampler\": {\"sampler\": {\"data_source\": {\"tensors\": [{}, {}]}}, \"batch_size\": 128, \"drop_last\": false}, \"generator\": null, \"collate_fn\": null, \"persistent_workers\": false, \"_DataLoader__initialized\": true, \"_IterableDataset_len_called\": null, \"_iterator\": null}, 4], \"privacy\": 3.0}, [0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1]]]"
+}

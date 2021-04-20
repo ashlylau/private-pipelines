@@ -1,0 +1,2 @@
+2,3 are experiments when I converted predict() to return a list of values.
+e_iter=5, d_iter=50.

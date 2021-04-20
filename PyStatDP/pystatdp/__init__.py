@@ -144,7 +144,9 @@ class pystatdp:
                 result.append((epsilon, float(p), d1, d2, kwargs, event))
                 if not quiet:
                     tqdm.write(
-                        f'Epsilon: {epsilon} | p-value: {p:5.3f} | Event: {event}')
+                        f'Epsilon: {epsilon} | p-value: {p:5.3f}')
+                    # tqdm.write(
+                        # f'Epsilon: {epsilon} | p-value: {p:5.3f} | Event: {event}')
                 logger.debug(f'D1: {d1} | D2: {d2} | kwargs: {kwargs}')
 
             return result

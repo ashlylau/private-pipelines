@@ -33,6 +33,7 @@ def main():
     parser.add_argument('--learning_rate', type=float, default=0.15, help='learning rate')
     parser.add_argument('--noise_multiplier', type=float, default=1.3, help='noise multiplier')
     parser.add_argument('--delta', type=float, default=0.01, help='delta')
+    parser.add_argument('--outliers', action='store_true', default=True, help='train outlier models')
     args = parser.parse_args()
 
     start_time = datetime.now()
@@ -70,10 +71,13 @@ def main():
     indices = np.arange(len(x_data))  # Get original indices
 
     # Get D and D' points. **** MODIFY THIS TO CHANGE D' ****
-    d_points_to_train = np.arange(150)  # Size of iris dataset
-    d_points_to_train = np.delete(d_points_to_train, outlier_indices)
-    d_points_to_train = random.sample(list(d_points_to_train), len(outlier_indices))  # Train same number of normal models
-    # d_points_to_train = outlier_indices  # Train outlier models.
+    if args.outliers:
+        print("train outliers")
+        d_points_to_train = outlier_indices  # Train outlier models.
+    else:
+        d_points_to_train = np.arange(150)  # Size of iris dataset
+        d_points_to_train = np.delete(d_points_to_train, outlier_indices)
+        d_points_to_train = random.sample(list(d_points_to_train), len(outlier_indices))  # Train same number of normal models
 
     x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(x_data, y_data, indices, test_size=0.2, random_state=42)
 

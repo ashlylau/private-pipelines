@@ -13,8 +13,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 model_path = "models/batch-"
-absolute_model_path = "/vol/al5217-tmp/iris/models"
-# absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/iris/models"
+# absolute_model_path = "/vol/al5217-tmp/iris/models"
+absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/iris/models"
 # absolute_model_path = "/Users/ashlylau/Desktop/year4/Indiv Project/private-pipelines/initial_hypothesis/iris/models"
 
 use_cuda = torch.cuda.is_available()
@@ -52,19 +52,30 @@ class IrisModel(nn.Module):
         x = self.out(x)
         return x
 
-# Predict class for x_test using model-model_number
-def predict(model_number, x_test, batch_number):
+def predict(model_number, test_loader, batch_number):
     model_number = model_number[0]
     # Randomly select model version to use to simulate algorithm randomness for the particular D'.
     num_models = len(os.listdir(absolute_model_path + "/batch-" + str(batch_number) + '/model-' + str(model_number)))
     model_version = np.random.randint(num_models)
     # print("Chosen model: {}".format(model_version))
     model = load_model(model_number, model_version, batch_number)
-    x_test = x_test.to(device)
+
+    predictions = []
+
     with torch.no_grad():
-        y_pred = model.forward(x_test).argmax()
-    # print("Model number: {}, prediction for x_test {} = {}".format(model_number, x_test, y_pred.item()))
-    return y_pred.item()
+        i = 0
+        for inputs, target in test_loader:
+            inputs, target = inputs.to(device), target.to(device)
+            
+            output = model(inputs)
+            pred = output.max(1, keepdim=True)[1].cpu().numpy().flatten()
+            predictions.extend(pred)
+            i += 1
+            if i > 0:
+                break
+
+    # print(predictions)
+    return predictions
 
 def train(model, criterion, optimizer, epochs, train_loader, train_private=True, delta=0.01):
     losses = []

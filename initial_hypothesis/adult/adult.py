@@ -7,6 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from opacus import PrivacyEngine
+from sklearn.metrics import roc_auc_score
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -43,19 +44,26 @@ class AdultModel(nn.Module):
         return out
 
 
-# Predict class for x_test using model-model_number
-def predict(model_number, x_test, batch_number):
+def predict(model_number, test_loader, batch_number):
     model_number = model_number[0]
     # Randomly select model version to use to simulate algorithm randomness for the particular D'.
     num_models = len(os.listdir(absolute_model_path + "/batch-" + str(batch_number) + '/model-' + str(model_number)))
     model_version = np.random.randint(num_models)
     # print("Chosen model: {}".format(model_version))
     model = load_model(model_number, model_version, batch_number, 97, 2)
-    x_test = x_test.to(device)
+
+    predictions = []
+
     with torch.no_grad():
-        y_pred = model.forward(x_test).argmax()
-    # print("Model number: {}, prediction for x_test {} = {}".format(model_number, x_test, y_pred.item()))
-    return y_pred.item()
+        for inputs, target in test_loader:
+            inputs, target = inputs.to(device), target.to(device)
+            
+            output = model(inputs)
+            pred = output.max(1, keepdim=True)[1].cpu().numpy().flatten()
+            predictions.extend(pred)
+            break
+
+    return predictions
 
 def train(model, loss_fn, optimizer, epochs, train_loader, train_private=True, delta=0.01):
     losses = []
@@ -89,6 +97,8 @@ def test(model, test_loader, test_loss_fn):
     test_loss = 0
     correct = 0
     test_size = 0
+    preds = []
+    targets = []
     
     with torch.no_grad():
         for inputs, target in test_loader:
@@ -98,15 +108,22 @@ def test(model, test_loader, test_loss_fn):
             test_size += len(inputs)
             test_loss += test_loss_fn(output, target).item() 
             pred = output.max(1, keepdim=True)[1] 
+            
+            pred_list = pred.tolist()
+            target_list = target.tolist()
+            preds.extend(pred_list)
+            targets.extend(target_list)
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     test_loss /= test_size
     accuracy = correct / test_size
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+    roc_auc = roc_auc_score(targets, preds)
+    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%, ROC_AUC: {})\n'.format(
         test_loss, correct, test_size,
-        100. * accuracy))
+        100. * accuracy,
+        roc_auc))
     
-    return test_loss, accuracy
+    return test_loss, accuracy, roc_auc
 
 # i : index of data left out; j : trained iteration
 def save_model(model, i, j, batch_number):
