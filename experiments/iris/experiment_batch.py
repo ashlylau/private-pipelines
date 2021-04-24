@@ -80,6 +80,7 @@ if __name__ == "__main__":
     print("test_loader length: {}".format(len(test_loader.dataset)))
 
     # Create experiment directory.
+    # experiment_path = '/Users/ashlylau/Desktop/year4/Indiv Project/private-pipelines/experiments/iris/'
     experiment_path = '/homes/al5217/private-pipelines/experiments/iris/'
     experiment_number = len(os.listdir(experiment_path))
     print("experiment_number: {}".format(experiment_number))
