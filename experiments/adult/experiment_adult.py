@@ -92,7 +92,8 @@ if __name__ == "__main__":
     minority_test_targets = torch.from_numpy(y_minority_test).to(torch.float64)
 
     minority_test_ds = TensorDataset(minority_test_inputs, minority_test_targets)
-    minority_test_loader = DataLoader(minority_test_ds, 128, pin_memory=True)
+    minority_test_loader = DataLoader(minority_test_ds, 50, pin_memory=True)
+    # minority_test_loader = DataLoader(minority_test_ds, 128, pin_memory=True)
 
     # Create experiment directory.
     experiment_path = '/homes/al5217/private-pipelines/experiments/adult/'

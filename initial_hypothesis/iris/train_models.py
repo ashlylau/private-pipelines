@@ -33,10 +33,13 @@ def main():
     parser.add_argument('--learning_rate', type=float, default=0.15, help='learning rate')
     parser.add_argument('--noise_multiplier', type=float, default=1.3, help='noise multiplier')
     parser.add_argument('--delta', type=float, default=0.01, help='delta')
-    parser.add_argument('--outliers', action='store_true', default=True, help='train outlier models')
+    parser.add_argument('--max_grad_norm', type=float, default=1.0, help='max grad norm')
+    parser.add_argument('--outliers', action='store_true', default=False, help='train outlier models')
     args = parser.parse_args()
 
     start_time = datetime.now()
+
+    print("Training parameters: {}".format(vars(args)))
 
     # Check whether torch can use cuda
     print("Torch is available: {}".format(torch.cuda.is_available()))
@@ -92,7 +95,7 @@ def main():
     # Train main private model
     losses, epsilon, delta, best_alpha = (-1,-1,-1,-1)
     for j in range(args.num_models):
-        losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, criterion, epochs, batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number)
+        losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, criterion, epochs, batch_size, args.learning_rate, args.noise_multiplier, args.delta, args.max_grad_norm, batch_number)
         
     # Train non-private model
     non_private_model = IrisModel().to(device)
@@ -101,7 +104,7 @@ def main():
     _ = train(non_private_model, criterion, optimizer, epochs, train_loader, False)
 
     # Evaluate models
-    accuracy = test(load_model(-1, 0, batch_number), test_loader)
+    accuracy = test(load_model(-1, 0, batch_number).to(device), test_loader)
     print("Full private model accuracy: {}".format(accuracy))
 
     accuracy = test(non_private_model, test_loader)
@@ -124,7 +127,7 @@ def main():
             
             # Train and save
             for j in range(args.num_models):  # We train multiple versions of the model to introduce randomness
-                train_and_save_private_model(i, j, train_loader_prime, criterion, epochs, batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number)
+                train_and_save_private_model(i, j, train_loader_prime, criterion, epochs, batch_size, args.learning_rate, args.noise_multiplier, args.delta, args.max_grad_norm, batch_number)
 
         # Evaluate leave-one-out private models
         total_accuracy = 0
@@ -132,7 +135,7 @@ def main():
         for i in d_points_to_train:
             if i in idx_test:
                 continue
-            model = load_model(i, 0, batch_number)
+            model = load_model(i, 0, batch_number).to(device)
             accuracy = test(model, test_loader)
             total_accuracy += accuracy
             num_points += 1

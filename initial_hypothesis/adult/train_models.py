@@ -36,10 +36,13 @@ def main():
     parser.add_argument('--learning_rate', type=float, default=0.00025, help='learning rate')
     parser.add_argument('--noise_multiplier', type=float, default=1.3, help='noise multiplier')
     parser.add_argument('--delta', type=float, default=0.00001, help='delta')
-    parser.add_argument('--outliers', action='store_true', default=True, help='train outlier models')
+    parser.add_argument('--max_grad_norm', type=float, default=1.0, help='max grad norm')
+    parser.add_argument('--outliers', action='store_true', default=False, help='train outlier models')
     args = parser.parse_args()
 
     start_time = datetime.now()
+
+    print("Training parameters: {}".format(vars(args)))
 
     # Check whether torch can use cuda
     print("Torch is available: {}".format(torch.cuda.is_available()))
@@ -82,10 +85,12 @@ def main():
     # Get D and D' points. **** MODIFY THIS TO CHANGE D' ****
     if args.outliers:
         d_points_to_train = outlier_indices
+        print("outlier models")
     else:
         d_points_to_train = np.arange(len(x_data_df))  # Size of adult dataset
         d_points_to_train = np.delete(d_points_to_train, outlier_indices)
         d_points_to_train = random.sample(list(d_points_to_train), len(outlier_indices))  # Train same number of normal models
+        print("normal models")
 
     # Split data
     df_X_train, df_X_test, df_y_train, df_y_test, idx_train, idx_test = train_test_split(x_data_df, y_data_df, indices, test_size=0.20, random_state=42)
@@ -135,13 +140,13 @@ def main():
     # Train main private model:
     losses, epsilon, delta, best_alpha = (-1,-1,-1,-1)
     for j in range(args.num_models):
-        losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, loss_fn, args.epochs, args.batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number, num_features, num_classes)
+        losses, epsilon, delta, best_alpha = train_and_save_private_model(-1, j, train_loader, loss_fn, args.epochs, args.batch_size, args.learning_rate, args.noise_multiplier, args.delta, args.max_grad_norm, batch_number, num_features, num_classes)
        
     # Evaluate models
     loss, accuracy, roc_auc = test(model, val_loader, test_loss_fn)
     print("Original model accuracy: {}, roc_auc: {}".format(accuracy, roc_auc))
 
-    loss, accuracy, roc_auc = test(load_model(-1, 0, batch_number, num_features, num_classes), val_loader, test_loss_fn)
+    loss, accuracy, roc_auc = test(load_model(-1, 0, batch_number, num_features, num_classes).to(device), val_loader, test_loss_fn)
     print("Full private model accuracy: {}, roc_auc: {}".format(accuracy, roc_auc))
 
     # Train leave-one-out models
@@ -165,7 +170,7 @@ def main():
 
             # Train and save
             for j in range(args.num_models):
-                train_and_save_private_model(i, j, train_loader_prime, loss_fn, args.epochs, args.batch_size, args.learning_rate, args.noise_multiplier, args.delta, batch_number, num_features, num_classes)
+                train_and_save_private_model(i, j, train_loader_prime, loss_fn, args.epochs, args.batch_size, args.learning_rate, args.noise_multiplier, args.delta, args.max_grad_norm, batch_number, num_features, num_classes)
 
         # Evaluate leave-one-out private models
         total_accuracy = 0
@@ -174,7 +179,7 @@ def main():
         for i in d_points_to_train:
             if i in idx_test:
                 continue
-            model = load_model(i, 0, batch_number, num_features, num_classes)
+            model = load_model(i, 0, batch_number, num_features, num_classes).to(device)
             loss, accuracy, roc_auc = test(model, val_loader, test_loss_fn)
             total_accuracy += accuracy
             total_roc_auc += roc_auc

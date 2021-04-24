@@ -6,6 +6,6 @@ export PATH=/vol/bitbucket/al5217/env/bin/:$PATH
 source activate
 source /vol/cuda/11.1.0-cudnn8.0.4.30/setup.sh
 TERM=vt100 # or TERM=xterm
-python3 -u -W ignore train_models.py --train_all --outliers --epochs 20 --batch_size 128 --num_models 100 --learning_rate 0.00025 --delta 0.0000001 --noise_multiplier 1.8 --max_grad_norm 1.0
+python3 -W ignore experiment_batch.py --plot_all --privacy 4.2 --test_range 0.1 --n_checks 7 --batch_number 3 --threshold 0.9 --d_iter 10000 --e_iter 500
 /usr/bin/nvidia-smi
 uptime

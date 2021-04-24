@@ -13,8 +13,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 model_path = "models/batch-"
-# absolute_model_path = "/vol/al5217-tmp/iris/models"
-absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/iris/models"
+absolute_model_path = "/vol/al5217-tmp/iris/models"
+# absolute_model_path = "/homes/al5217/private-pipelines/initial_hypothesis/iris/models"
 # absolute_model_path = "/Users/ashlylau/Desktop/year4/Indiv Project/private-pipelines/initial_hypothesis/iris/models"
 
 use_cuda = torch.cuda.is_available()
@@ -63,16 +63,11 @@ def predict(model_number, test_loader, batch_number):
     predictions = []
 
     with torch.no_grad():
-        i = 0
         for inputs, target in test_loader:
-            inputs, target = inputs.to(device), target.to(device)
-            
             output = model(inputs)
-            pred = output.max(1, keepdim=True)[1].cpu().numpy().flatten()
+            pred = output.max(1, keepdim=True)[1].numpy().flatten()
             predictions.extend(pred)
-            i += 1
-            if i > 0:
-                break
+            break
 
     # print(predictions)
     return predictions
@@ -130,14 +125,14 @@ def save_model(model, i, j, batch_number):
     torch.save(model.state_dict(), "{}/batch-{}/model-{}/{}.pt".format(absolute_model_path, batch_number, i, j))
 
 def load_model(i, j, batch_number):
-    new_model = IrisModel().to(device)
+    new_model = IrisModel()
     new_model.load_state_dict(torch.load(absolute_model_path + "/batch-" + str(batch_number) + "/model-" + str(i) + "/" + str(j) + ".pt"))
     # Call model.eval() to set dropout and batch normalization layers to evaluation mode before running inference. 
     # Failing to do this will yield inconsistent inference results.
     new_model.eval()
     return new_model
 
-def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_size, learning_rate, noise_multiplier, delta, batch_number):
+def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_size, learning_rate, noise_multiplier, delta, max_grad_norm, batch_number):
     priv_model = IrisModel().to(device)
     priv_optimizer = torch.optim.Adam(priv_model.parameters(), lr=learning_rate)
     privacy_engine = PrivacyEngine(
@@ -146,7 +141,7 @@ def train_and_save_private_model(i, j, train_loader, criterion, epochs, batch_si
         sample_size=len(train_loader.dataset),
         alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
         noise_multiplier=noise_multiplier,
-        max_grad_norm=1.0
+        max_grad_norm=max_grad_norm
     )
     privacy_engine.attach(priv_optimizer)
     print("Training model {}:".format(i))
